@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "com.steelaspect.stickytoggle.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"EntityMixin",
+		"HoneyBlockMixin",
+		"LivingEntityMixin",
+		"SlimeBlockMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
