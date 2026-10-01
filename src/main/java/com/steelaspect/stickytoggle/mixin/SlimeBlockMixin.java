@@ -3,14 +3,11 @@ package com.steelaspect.stickytoggle.mixin;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.steelaspect.stickytoggle.config.StickyConfig;
 import com.steelaspect.stickytoggle.config.Toggle;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.SlimeBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,19 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SlimeBlock.class)
 public abstract class SlimeBlockMixin {
-	/**
-	 * slime.fallDamageNegation — vanilla calls handleFallDamage(fallDistance, 0.0F, ...),
-	 * i.e. no fall damage. When off, players land like on a normal block
-	 * (Block.onLandedUpon: multiplier 1.0F).
-	 */
-	@Inject(method = "onLandedUpon", at = @At("HEAD"), cancellable = true)
-	private void stickytoggle$fallDamage(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance, CallbackInfo ci) {
-		if (entity instanceof PlayerEntity && !StickyConfig.get(entity, Toggle.SLIME_FALL_DAMAGE_NEGATION)) {
-			entity.handleFallDamage(fallDistance, 1.0F, entity.getDamageSources().fall());
-			ci.cancel();
-		}
-	}
-
 	/**
 	 * slime.bounce — vanilla bounce() flips downward Y velocity. When off, players land like
 	 * on any other block (Block.onEntityLand zeroes Y velocity).

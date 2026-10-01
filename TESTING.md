@@ -3,22 +3,24 @@
 Setup: dedicated server + client, both with StickyToggle and Fabric API. You need to be an op. Build a test area with slime and honey floors, a 2-high honey wall, and towers about 20 blocks tall above slime and above honey. Run `/stickytoggle reset` before each section.
 
 ## Baseline (vanilla, all `true`)
-- [ ] `/stickytoggle list` shows 8 keys, all `true`.
-- [ ] `config/stickytoggle.json` exists with 8 keys.
+- [ ] `/stickytoggle list` shows 6 keys, all `true`.
+- [ ] `config/stickytoggle.json` exists with 6 keys.
 
 ## Slime
 - [ ] **slime.bounce=false**: drop onto slime, no bounce. `true`: bounce returns. Sneaking still prevents bounce in both states.
-- [ ] **slime.fallDamageNegation=false**: 20-block drop onto slime with bounce off causes fall damage. `true`: no damage.
 - [ ] **slime.walkSlowdown=false**: walk on slime at normal speed. `true`: slowed.
 - [ ] **slime.slipperiness=false**: sprint and release keys, you stop as fast as on stone. `true`: you slide.
-- [ ] Preset `noslime` turns off all 4 slime keys and leaves the honey keys `true`.
+- [ ] Preset `noslime` turns off all 3 slime keys and leaves the honey keys `true`.
 
 ## Honey
 - [ ] **honey.velocityMultiplier=false**: walk on honey at normal speed. `true`: slowed.
 - [ ] **honey.jumpMultiplier=false**: full jump height on honey, auto-jump works. `true`: low jump.
-- [ ] **honey.wallSlide=false**: hug a honey wall in mid-air, you fall normally, with no particles, no slide sound, and fall damage is kept. `true`: slow slide with particles and sound.
-- [ ] **honey.fallDamageReduction=false**: 20-block drop onto honey causes full fall damage, with no slide sound or particles. `true`: about 20% damage.
-- [ ] Preset `nohoney` turns off all 4 honey keys and leaves the slime keys `true`.
+- [ ] **honey.wallSlide=false**: hug a honey wall in mid-air, you fall at normal speed with no particles or slide sound, and take no fall damage on landing. `true`: slow slide with particles and sound.
+- [ ] Preset `nohoney` turns off all 3 honey keys and leaves the slime keys `true`.
+
+## Fall damage always vanilla (run with `/stickytoggle preset allOff`)
+- [ ] 20-block drop onto slime with bounce off: no damage.
+- [ ] 20-block drop onto honey: about 20% damage.
 
 ## Only players affected (run with `/stickytoggle preset allOff`)
 - [ ] Drop a zombie/cow onto slime from 10+ blocks: it bounces and takes no damage.

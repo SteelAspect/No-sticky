@@ -5,7 +5,7 @@ A Fabric mod for **Minecraft Java 1.21.11** that lets server operators toggle ho
 > **Only players are affected.** Mobs, items, XP orbs, minecarts, boats, TNT, arrows and every game mechanic (pistons, block sticking, redstone, crafting, mob AI) stay 100% vanilla. Every hook checks `entity instanceof PlayerEntity` and falls through to vanilla code for everything else.
 
 ## Features
-- 8 independent toggles, all defaulting to `true` (vanilla behaviour).
+- 6 independent toggles, all defaulting to `true` (vanilla behaviour).
 - Live changes via commands, no restart needed.
 - The server syncs the toggle state to every client on join and on change, so client-side movement prediction matches the server.
 - Config saved to `config/stickytoggle.json`.
@@ -15,15 +15,15 @@ A Fabric mod for **Minecraft Java 1.21.11** that lets server operators toggle ho
 | Key | Vanilla behaviour (when `true`) | When `false` (players only) |
 |---|---|---|
 | `slime.bounce` | Bounce when landing on slime | Land like on a normal block |
-| `slime.fallDamageNegation` | No fall damage landing on slime | Normal fall damage |
 | `slime.walkSlowdown` | Slowed while walking on slime | Normal walking speed |
 | `slime.slipperiness` | Slipperiness 0.8 (slides) | Default 0.6 (no slide) |
 | `honey.velocityMultiplier` | Movement × 0.4 on honey | Normal speed |
 | `honey.jumpMultiplier` | Jump height × 0.5 on honey (auto-jump disabled) | Normal jump |
-| `honey.wallSlide` | Slow slide down honey walls, with particles, sound and fall-distance reset | Fall normally past honey walls |
-| `honey.fallDamageReduction` | Fall damage × 0.2, plus a slide sound and particles on landing | Normal fall damage, no honey landing effects |
+| `honey.wallSlide` | Slow slide down honey walls, with particles and sound | Fall past honey walls at normal speed (fall distance is still reset, so no extra damage) |
 
-Not toggleable: honey's slightly smaller hitbox. It is a block property shared by every entity.
+Not toggleable:
+- **Fall damage.** Players always get vanilla fall damage: none on slime, 20% on honey. No setting can make these blocks deal full fall damage.
+- Honey's slightly smaller hitbox. It is a block property shared by every entity.
 
 ## Commands (permission level 2 / ops)
 ```
@@ -40,13 +40,11 @@ Not toggleable: honey's slightly smaller hitbox. It is a block property shared b
 ```json
 {
   "slime.bounce": true,
-  "slime.fallDamageNegation": true,
   "slime.walkSlowdown": true,
   "slime.slipperiness": true,
   "honey.velocityMultiplier": true,
   "honey.jumpMultiplier": true,
-  "honey.wallSlide": true,
-  "honey.fallDamageReduction": true
+  "honey.wallSlide": true
 }
 ```
 
