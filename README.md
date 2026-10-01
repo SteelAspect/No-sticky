@@ -54,6 +54,9 @@ Not toggleable:
 - `defaults` sets the starting values for players who have never used the command.
 - `players` holds each player's own settings. To change a single effect for one player, edit their entry while the server is stopped.
 
+## Download
+Prebuilt jar: [`releases/stickytoggle-1.0.0.jar`](releases/stickytoggle-1.0.0.jar)
+
 ## Install (both sides required)
 Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.5, Fabric API (0.141.6+1.21.11 tested), Java 21.
 
