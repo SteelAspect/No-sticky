@@ -6,7 +6,7 @@ A Fabric mod for **Minecraft Java 1.21.11** that lets server operators toggle ho
 
 ## Features
 - 6 independent toggles, all defaulting to `true` (vanilla behaviour).
-- Live changes via commands, no restart needed.
+- One command per block, live, no restart needed, no restart needed.
 - The server syncs the toggle state to every client on join and on change, so client-side movement prediction matches the server.
 - Config saved to `config/stickytoggle.json`.
 
@@ -27,16 +27,11 @@ Not toggleable:
 
 ## Commands (permission level 2 / ops)
 ```
-/stickytoggle list                      show all toggles
-/stickytoggle <key> <true|false>        set one toggle (keys tab-complete)
-/stickytoggle slime <on|off>            all slime toggles at once
-/stickytoggle honey <on|off>            all honey toggles at once
-/stickytoggle reset                     everything back to vanilla
-/stickytoggle preset <vanilla|noslime|nohoney|allOff>
+/stickytoggle slime <on|off>    all slime effects for players
+/stickytoggle honey <on|off>    all honey effects for players
 ```
-- `slime off` / `honey off` only change that block and leave the other block as it is.
-- `noslime` turns off every `slime.*` toggle and turns every `honey.*` toggle back on. `nohoney` does the reverse. `allOff` turns off everything.
-- Changes are saved immediately and pushed to all connected clients.
+- Each command only changes its own block. Changes are saved immediately and pushed to all connected clients.
+- To turn single effects on or off, edit `config/stickytoggle.json` (see below) and restart the server.
 
 ## Config
 `config/stickytoggle.json`, created on first start:
