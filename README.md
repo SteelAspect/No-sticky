@@ -29,10 +29,13 @@ Not toggleable:
 ```
 /stickytoggle list                      show all toggles
 /stickytoggle <key> <true|false>        set one toggle (keys tab-complete)
+/stickytoggle slime <on|off>            all slime toggles at once
+/stickytoggle honey <on|off>            all honey toggles at once
 /stickytoggle reset                     everything back to vanilla
 /stickytoggle preset <vanilla|noslime|nohoney|allOff>
 ```
-- `noslime` turns off every `slime.*` toggle. `nohoney` turns off every `honey.*` toggle. `allOff` turns off everything.
+- `slime off` / `honey off` only change that block and leave the other block as it is.
+- `noslime` turns off every `slime.*` toggle and turns every `honey.*` toggle back on. `nohoney` does the reverse. `allOff` turns off everything.
 - Changes are saved immediately and pushed to all connected clients.
 
 ## Config

@@ -12,11 +12,16 @@ Setup: dedicated server + client, both with StickyToggle and Fabric API. You nee
 - [ ] **slime.slipperiness=false**: sprint and release keys, you stop as fast as on stone. `true`: you slide.
 - [ ] Preset `noslime` turns off all 3 slime keys and leaves the honey keys `true`.
 
+- [ ] `/stickytoggle slime off` turns off all 3 slime keys without changing the honey keys. `slime on` turns them back on.
+
 ## Honey
 - [ ] **honey.velocityMultiplier=false**: walk on honey at normal speed. `true`: slowed.
 - [ ] **honey.jumpMultiplier=false**: full jump height on honey, auto-jump works. `true`: low jump.
 - [ ] **honey.wallSlide=false**: hug a honey wall in mid-air, you fall at normal speed with no particles or slide sound, and take no fall damage on landing. `true`: slow slide with particles and sound.
 - [ ] Preset `nohoney` turns off all 3 honey keys and leaves the slime keys `true`.
+
+- [ ] `/stickytoggle honey off` turns off all 3 honey keys without changing the slime keys. `honey on` turns them back on.
+- [ ] Typing `/stickytoggle slime.` still tab-completes the individual keys.
 
 ## Fall damage always vanilla (run with `/stickytoggle preset allOff`)
 - [ ] 20-block drop onto slime with bounce off: no damage.

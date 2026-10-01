@@ -17,7 +17,7 @@ import java.util.Arrays;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
-/** /stickytoggle list | reset | preset <name> | <key> <true|false>  (permission level 2) */
+/** /stickytoggle list | reset | preset <name> | slime|honey <on|off> | <key> <true|false>  (permission level 2) */
 public final class StickyCommand {
 	private static final String[] PRESETS = {"vanilla", "noslime", "nohoney", "allOff"};
 
@@ -33,11 +33,38 @@ public final class StickyCommand {
 						.then(argument("name", StringArgumentType.word())
 								.suggests((ctx, b) -> CommandSource.suggestMatching(PRESETS, b))
 								.executes(ctx -> preset(ctx, StringArgumentType.getString(ctx, "name")))))
+				.then(group("slime"))
+				.then(group("honey"))
 				.then(argument("key", StringArgumentType.string())
 						.suggests((ctx, b) -> CommandSource.suggestMatching(
 								Arrays.stream(Toggle.values()).map(t -> t.key), b))
 						.then(argument("value", BoolArgumentType.bool())
 								.executes(StickyCommand::set))));
+	}
+
+	/** /stickytoggle <slime|honey> <on|off>: sets every toggle of that block, leaves the other block alone. */
+	private static com.mojang.brigadier.builder.LiteralArgumentBuilder<ServerCommandSource> group(String block) {
+		return literal(block).then(argument("state", StringArgumentType.word())
+				.suggests((ctx, b) -> CommandSource.suggestMatching(new String[]{"on", "off"}, b))
+				.executes(ctx -> setGroup(ctx, block, StringArgumentType.getString(ctx, "state"))));
+	}
+
+	private static int setGroup(CommandContext<ServerCommandSource> ctx, String block, String state) {
+		boolean value;
+		switch (state) {
+			case "on", "true" -> value = true;
+			case "off", "false" -> value = false;
+			default -> {
+				ctx.getSource().sendError(Text.literal("Use on or off"));
+				return 0;
+			}
+		}
+		for (Toggle t : Toggle.values()) {
+			if (t.key.startsWith(block + ".")) StickyConfig.SERVER.set(t, value);
+		}
+		apply(ctx);
+		ctx.getSource().sendFeedback(() -> Text.literal("All " + block + " toggles " + (value ? "on" : "off")), true);
+		return 1;
 	}
 
 	private static int list(CommandContext<ServerCommandSource> ctx) {
