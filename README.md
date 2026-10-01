@@ -1,14 +1,15 @@
 # StickyToggle
 
-A Fabric mod for **Minecraft Java 1.21.11** that lets server operators toggle how slime blocks and honey blocks physically affect **players**.
+A Fabric mod for **Minecraft Java 1.21.11** that lets each player choose how slime blocks and honey blocks physically affect **them**.
 
 > **Only players are affected.** Mobs, items, XP orbs, minecarts, boats, TNT, arrows and every game mechanic (pistons, block sticking, redstone, crafting, mob AI) stay 100% vanilla. Every hook checks `entity instanceof PlayerEntity` and falls through to vanilla code for everything else.
 
 ## Features
-- 6 independent toggles, all defaulting to `true` (vanilla behaviour).
-- One command per block, live, no restart needed, no restart needed.
-- The server syncs the toggle state to every client on join and on change, so client-side movement prediction matches the server.
-- Config saved to `config/stickytoggle.json`.
+- Any player can run the command. No op needed.
+- Settings are **per player**: your command only changes your own movement, and other players are unaffected.
+- Changes apply live, and your settings are remembered across relogs and server restarts.
+- The server syncs your settings to your client on join and on change, so client-side movement prediction matches the server.
+- Saved in `config/stickytoggle.json`.
 
 ## Toggle keys
 
@@ -25,26 +26,33 @@ Not toggleable:
 - **Fall damage.** Players always get vanilla fall damage: none on slime, 20% on honey. No setting can make these blocks deal full fall damage.
 - Honey's slightly smaller hitbox. It is a block property shared by every entity.
 
-## Commands (permission level 2 / ops)
+## Commands (everyone)
 ```
-/stickytoggle slime <on|off>    all slime effects for players
-/stickytoggle honey <on|off>    all honey effects for players
+/stickytoggle slime <on|off>    all slime effects, for you only
+/stickytoggle honey <on|off>    all honey effects, for you only
 ```
-- Each command only changes its own block. Changes are saved immediately and pushed to all connected clients.
-- To turn single effects on or off, edit `config/stickytoggle.json` (see below) and restart the server.
+- Each command only changes its own block, and only for the player who ran it.
+- It has to be run by a player. The server console can't use it.
 
 ## Config
-`config/stickytoggle.json`, created on first start:
+`config/stickytoggle.json` is managed by the mod:
 ```json
 {
-  "slime.bounce": true,
-  "slime.walkSlowdown": true,
-  "slime.slipperiness": true,
-  "honey.velocityMultiplier": true,
-  "honey.jumpMultiplier": true,
-  "honey.wallSlide": true
+  "defaults": {
+    "slime.bounce": true,
+    "slime.walkSlowdown": true,
+    "slime.slipperiness": true,
+    "honey.velocityMultiplier": true,
+    "honey.jumpMultiplier": true,
+    "honey.wallSlide": true
+  },
+  "players": {
+    "<player uuid>": { "slime.bounce": false, "...": "..." }
+  }
 }
 ```
+- `defaults` sets the starting values for players who have never used the command.
+- `players` holds each player's own settings. To change a single effect for one player, edit their entry while the server is stopped.
 
 ## Install (both sides required)
 Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.5, Fabric API (0.141.6+1.21.11 tested), Java 21.
@@ -52,7 +60,7 @@ Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.5, Fabric API (0.141.6+1
 1. Put `stickytoggle-<version>.jar` and Fabric API in the `mods/` folder of the **server**.
 2. Put the same jars in the `mods/` folder of **every client**.
 
-Player movement is predicted by the client. If a client joins without the mod, the server logs a warning. That player will rubber-band on slime/honey whenever a toggle is off. Clients reset to vanilla on disconnect, so the mod is harmless on servers that don't have it.
+Player movement is predicted by the client. If a client joins without the mod, the server logs a warning. That player can't change their settings and always gets vanilla behaviour, unless their `defaults` or `players` entry has effects turned off. In that case they will rubber-band on slime and honey. Clients reset to vanilla on disconnect, so the mod is harmless on servers that don't have it.
 
 ## Building
 ```

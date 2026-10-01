@@ -1,10 +1,10 @@
 # StickyToggle test checklist (Minecraft 1.21.11)
 
-Setup: dedicated server + client, both with StickyToggle and Fabric API. You need to be an op. Build a test area with slime and honey floors, a 2-high honey wall, and towers about 20 blocks tall above slime and above honey. Run `/stickytoggle slime on` and `/stickytoggle honey on` before each section. Test individual toggles by editing `config/stickytoggle.json` and restarting the server.
+Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, and towers about 20 blocks tall above slime and above honey. Run `/stickytoggle slime on` and `/stickytoggle honey on` before each section. To test a single toggle, stop the server, edit your entry under `players` in `config/stickytoggle.json`, then start it again.
 
 ## Baseline (vanilla, all `true`)
 - [ ] Tab-completing `/stickytoggle ` shows only `slime` and `honey`, and each one only offers `on` and `off`.
-- [ ] `config/stickytoggle.json` exists with 6 keys.
+- [ ] `config/stickytoggle.json` has a `defaults` section with 6 keys and a `players` section.
 
 ## Slime
 - [ ] **slime.bounce=false**: drop onto slime, no bounce. `true`: bounce returns. Sneaking still prevents bounce in both states.
@@ -33,11 +33,13 @@ Setup: dedicated server + client, both with StickyToggle and Fabric API. You nee
 - [ ] Pistons still push and pull blocks stuck to slime/honey, and slime and honey still don't stick to each other.
 - [ ] Redstone and crafting (slime ball ↔ block, honey bottle ↔ block) are unchanged.
 
-## Sync / live changes
-- [ ] Toggle while standing on honey: speed changes instantly with no rubber-banding and no restart.
-- [ ] Relog: the client receives the current state, and behaviour matches the server immediately.
-- [ ] A second player sees no desync after another op changes a toggle.
-- [ ] Restart the server: the toggles persist from the JSON.
-- [ ] Join with a client **without** the mod: the server log shows a warning naming the player.
-- [ ] Join a vanilla server with the modded client: everything is vanilla, with no leftover toggles.
-- [ ] A non-op running `/stickytoggle` is denied.
+## Per-player / sync
+- [ ] A non-op player can run `/stickytoggle slime off`.
+- [ ] With 2 players, A runs `/stickytoggle honey off`. A walks on honey at normal speed, B is still slowed, and neither one rubber-bands.
+- [ ] B sees A move smoothly, without jitter.
+- [ ] A changes a setting while standing on honey: A's speed changes instantly with no rubber-banding.
+- [ ] A relogs: A's settings are kept and apply straight away.
+- [ ] Restart the server: everyone's settings persist, and `players` in the JSON lists A's UUID.
+- [ ] Running the command from the server console gives a "must be a player" error.
+- [ ] Join with a client **without** the mod: the server logs a warning naming the player.
+- [ ] Join a vanilla server with the modded client: everything is vanilla, with no leftover settings.
