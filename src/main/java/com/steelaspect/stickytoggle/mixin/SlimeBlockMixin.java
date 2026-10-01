@@ -14,23 +14,21 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SlimeBlock.class)
 public abstract class SlimeBlockMixin {
 	/**
 	 * slime.fallDamageNegation — vanilla calls handleFallDamage(fallDistance, 0.0F, ...),
-	 * i.e. no fall damage. When off, players use the normal Block multiplier of 1.0F.
+	 * i.e. no fall damage. When off, players land like on a normal block
+	 * (Block.onLandedUpon: multiplier 1.0F).
 	 */
-	@ModifyArg(method = "onLandedUpon", at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/entity/Entity;handleFallDamage(DFLnet/minecraft/entity/damage/DamageSource;)Z"),
-			index = 1)
-	private float stickytoggle$fallDamage(float damagePerDistance, World world, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
+	@Inject(method = "onLandedUpon", at = @At("HEAD"), cancellable = true)
+	private void stickytoggle$fallDamage(World world, BlockState state, BlockPos pos, Entity entity, double fallDistance, CallbackInfo ci) {
 		if (entity instanceof PlayerEntity && !StickyConfig.get(entity, Toggle.SLIME_FALL_DAMAGE_NEGATION)) {
-			return 1.0F;
+			entity.handleFallDamage(fallDistance, 1.0F, entity.getDamageSources().fall());
+			ci.cancel();
 		}
-		return damagePerDistance;
 	}
 
 	/**

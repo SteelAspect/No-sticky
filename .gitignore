@@ -15,3 +15,4 @@ remappedSrc/
 bin/
 .DS_Store
 *.log
+/stickytoggle-*.jar
