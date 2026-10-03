@@ -52,6 +52,7 @@ jobs:
             Each player can choose how slime and honey blocks affect their own movement:
             - `/stickytoggle slime on|off`: bounce, walk slowdown, slipperiness
             - `/stickytoggle honey on|off`: speed slowdown, jump reduction, wall slide
+            - `/stickytoggle all on|off`: slime and honey together
 
             Works for every player, no op needed, and only changes the player who runs it. Fall damage, mobs, items and mechanics stay vanilla.
 

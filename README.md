@@ -30,8 +30,9 @@ Not toggleable:
 ```
 /stickytoggle slime <on|off>    all slime effects, for you only
 /stickytoggle honey <on|off>    all honey effects, for you only
+/stickytoggle all <on|off>      slime and honey effects together, for you only
 ```
-- Each command only changes its own block, and only for the player who ran it.
+- `slime` and `honey` only change their own block. `all` changes both. Every command only affects the player who ran it.
 - It has to be run by a player. The server console can't use it.
 
 ## Config

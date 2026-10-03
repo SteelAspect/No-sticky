@@ -1,9 +1,9 @@
 # StickyToggle test checklist (Minecraft 1.21.11)
 
-Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, and towers about 20 blocks tall above slime and above honey. Run `/stickytoggle slime on` and `/stickytoggle honey on` before each section. To test a single toggle, stop the server, edit your entry under `players` in `config/stickytoggle.json`, then start it again.
+Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, and towers about 20 blocks tall above slime and above honey. Run `/stickytoggle all on` before each section. To test a single toggle, stop the server, edit your entry under `players` in `config/stickytoggle.json`, then start it again.
 
 ## Baseline (vanilla, all `true`)
-- [ ] Tab-completing `/stickytoggle ` shows only `slime` and `honey`, and each one only offers `on` and `off`.
+- [ ] Tab-completing `/stickytoggle ` shows only `slime`, `honey` and `all`, and each one only offers `on` and `off`.
 - [ ] `config/stickytoggle.json` has a `defaults` section with 6 keys and a `players` section.
 
 ## Slime
@@ -20,11 +20,16 @@ Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a n
 
 - [ ] `/stickytoggle honey off` turns off all 3 honey keys without changing the slime keys. `honey on` turns them back on.
 
-## Fall damage always vanilla (run with `/stickytoggle slime off` + `/stickytoggle honey off`)
+## Both blocks
+- [ ] `/stickytoggle all off` turns off all 6 keys and says "Slime and honey effects off for you". Slime and honey both behave as when each is off, with no rubber-banding.
+- [ ] `/stickytoggle all on` turns all 6 keys back on.
+- [ ] After `slime off` only, `all on` turns the slime keys back on and leaves honey on.
+
+## Fall damage always vanilla (run with `/stickytoggle all off`)
 - [ ] 20-block drop onto slime with bounce off: no damage.
 - [ ] 20-block drop onto honey: about 20% damage.
 
-## Only players affected (run with `/stickytoggle slime off` + `/stickytoggle honey off`)
+## Only players affected (run with `/stickytoggle all off`)
 - [ ] Drop a zombie/cow onto slime from 10+ blocks: it bounces and takes no damage.
 - [ ] A mob walking on slime is slowed, and a mob on honey is slowed and jumps low.
 - [ ] Drop an item and an XP orb onto slime: they slide (0.8 slipperiness). Drop an item from height: it bounces.
