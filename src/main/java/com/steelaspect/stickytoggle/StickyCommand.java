@@ -13,43 +13,39 @@ import net.minecraft.text.Text;
 
 import static net.minecraft.server.command.CommandManager.literal;
 
-/** /stickytoggle <slime|honey|all> <on|off>: any player, changes only their own settings. */
+/** /stickytoggle <group|all> <on|off>: any player, changes only their own settings. */
 public final class StickyCommand {
 	private StickyCommand() {
 	}
 
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("stickytoggle")
-				.then(block("slime"))
-				.then(block("honey"))
-				.then(block("all")));
+		LiteralArgumentBuilder<ServerCommandSource> root = literal("stickytoggle");
+		for (Toggle.Group group : Toggle.Group.values()) {
+			root.then(onOff(group.command, group));
+		}
+		dispatcher.register(root.then(onOff("all", null)));
 	}
 
-	private static LiteralArgumentBuilder<ServerCommandSource> block(String block) {
-		return literal(block)
-				.then(literal("on").executes(ctx -> set(ctx, block, true)))
-				.then(literal("off").executes(ctx -> set(ctx, block, false)));
+	private static LiteralArgumentBuilder<ServerCommandSource> onOff(String word, Toggle.Group group) {
+		return literal(word)
+				.then(literal("on").executes(ctx -> set(ctx, group, true)))
+				.then(literal("off").executes(ctx -> set(ctx, group, false)));
 	}
 
 	/**
-	 * Sets every toggle of one block for the player running the command; the other block is left alone.
-	 * "all" sets both blocks at once.
+	 * Sets every toggle of one group for the player running the command; other groups are left alone.
+	 * A null group ("all") sets every toggle at once.
 	 */
-	private static int set(CommandContext<ServerCommandSource> ctx, String block, boolean value) throws CommandSyntaxException {
+	private static int set(CommandContext<ServerCommandSource> ctx, Toggle.Group group, boolean value) throws CommandSyntaxException {
 		ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
-		boolean all = block.equals("all");
 		ToggleState state = StickyConfig.forPlayer(player.getUuid());
 		for (Toggle t : Toggle.values()) {
-			if (all || t.key.startsWith(block + ".")) state.set(t, value);
+			if (group == null || t.group == group) state.set(t, value);
 		}
 		StickyConfig.save();
 		StickyToggle.sync(player);
-		String name = all ? "Slime and honey" : capitalize(block);
+		String name = group == null ? "All block" : group.displayName;
 		ctx.getSource().sendFeedback(() -> Text.literal(name + " effects " + (value ? "on" : "off") + " for you"), false);
 		return 1;
-	}
-
-	private static String capitalize(String s) {
-		return Character.toUpperCase(s.charAt(0)) + s.substring(1);
 	}
 }

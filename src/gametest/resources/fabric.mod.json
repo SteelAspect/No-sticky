@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "stickytoggle-test",
+  "version": "1.0.0",
+  "name": "StickyToggle (client game tests)",
+  "authors": ["steelaspect"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-client-gametest": [
+      "com.steelaspect.stickytoggle.test.StickyToggleClientGameTest"
+    ]
+  },
+  "depends": {
+    "stickytoggle": "*"
+  }
+}

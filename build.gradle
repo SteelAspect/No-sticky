@@ -29,6 +29,18 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
 
+// In-game client tests (src/gametest), run with ./gradlew runClientGameTest. Not part of the mod jar.
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = 'stickytoggle-test'
+        enableGameTests = false
+        enableClientGameTests = true
+        eula = true
+        clearRunDirectory = true
+    }
+}
+
 processResources {
     inputs.property "version", project.version
     filesMatching("fabric.mod.json") {

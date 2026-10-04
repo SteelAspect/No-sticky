@@ -31,7 +31,7 @@ public class StickyToggle implements ModInitializer {
 			ServerPlayNetworking.send(player, SyncPayload.of(StickyConfig.forPlayer(player.getUuid())));
 		} else {
 			LOGGER.warn("Player {} joined without StickyToggle installed; their movement prediction "
-					+ "will not match server toggles (expect rubber-banding on slime/honey).",
+					+ "will not match server toggles (expect rubber-banding where toggles are off).",
 					player.getName().getString());
 		}
 	}

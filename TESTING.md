@@ -1,10 +1,12 @@
 # StickyToggle test checklist (Minecraft 1.21.11)
 
-Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, and towers about 20 blocks tall above slime and above honey. Run `/stickytoggle all on` before each section. To test a single toggle, stop the server, edit your entry under `players` in `config/stickytoggle.json`, then start it again.
+Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, towers about 20 blocks tall above slime and above honey, and the 2.0 test lanes listed under *New blocks* below.
+
+Most of the movement checks also run automatically with `./gradlew runClientGameTest` (28 checks: every new toggle on and off, freezing and thorn damage, server/client sync, `all`). The manual list covers what that test doesn't: dedicated servers, two players, relogs, mobs and items. Run `/stickytoggle all on` before each section. To test a single toggle, stop the server, edit your entry under `players` in `config/stickytoggle.json`, then start it again.
 
 ## Baseline (vanilla, all `true`)
-- [ ] Tab-completing `/stickytoggle ` shows only `slime`, `honey` and `all`, and each one only offers `on` and `off`.
-- [ ] `config/stickytoggle.json` has a `defaults` section with 6 keys and a `players` section.
+- [ ] Tab-completing `/stickytoggle ` shows `slime`, `honey`, `soulsand`, `ice`, `cobweb`, `powdersnow`, `berrybush`, `water`, `bubblecolumn` and `all`, and each one only offers `on` and `off`.
+- [ ] `config/stickytoggle.json` has a `defaults` section with 13 keys and a `players` section.
 
 ## Slime
 - [ ] **slime.bounce=false**: drop onto slime, no bounce. `true`: bounce returns. Sneaking still prevents bounce in both states.
@@ -20,9 +22,25 @@ Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a n
 
 - [ ] `/stickytoggle honey off` turns off all 3 honey keys without changing the slime keys. `honey on` turns them back on.
 
-## Both blocks
-- [ ] `/stickytoggle all off` turns off all 6 keys and says "Slime and honey effects off for you". Slime and honey both behave as when each is off, with no rubber-banding.
-- [ ] `/stickytoggle all on` turns all 6 keys back on.
+## New blocks (2.0)
+Lanes: a soul sand floor, an ice / packed ice / blue ice floor, a stone corridor filled with cobwebs, one with powder snow at feet level, one with sweet berry bushes (age 1+) on grass, a channel of flowing water, and a 10-deep soul sand bubble column plus a magma one.
+- [ ] **soulsand.slowdown=false**: walk on soul sand at stone speed. `true`: slowed. Soul Speed boots still work with `true`.
+- [ ] **ice.slipperiness=false**: sprint on each ice type and release keys, you stop as fast as on stone. `true`: you slide.
+- [ ] **cobweb.slowdown=false**: walk through cobwebs at normal speed. Falling into a cobweb still cancels fall damage. `true`: nearly stuck.
+- [ ] **powderSnow.slowdown=false**: walk through powder snow at normal speed and you still freeze (frost overlay, damage after a while). `true`: slowed.
+- [ ] **berryBush.slowdown=false**: walk through berry bushes at normal speed and the thorns still hurt. `true`: slowed.
+- [ ] **water.current=false**: stand in flowing water, you aren't pushed, and you can still swim and float. Lava flow still pushes you. `true`: pushed along.
+- [ ] **bubbleColumn.push=false**: in a soul sand column you are not carried up, in a magma column you are not pulled down, and you get no launch at the top. Breathing and drowning are vanilla. `true`: vanilla push and pull.
+- [ ] Each word (`soulsand`, `ice`, `cobweb`, `powdersnow`, `berrybush`, `water`, `bubblecolumn`) changes only its own key(s).
+
+## Only players affected, new blocks (run with `/stickytoggle all off`)
+- [ ] A mob on soul sand is slowed, and a mob in cobwebs, powder snow or berry bushes is slowed.
+- [ ] An item or mob on ice slides, a boat on ice is fast.
+- [ ] Items and mobs are pushed by flowing water and carried by bubble columns.
+
+## Every block
+- [ ] `/stickytoggle all off` turns off all 13 keys and says "All block effects off for you". Every block behaves as when its own toggle is off, with no rubber-banding.
+- [ ] `/stickytoggle all on` turns all 13 keys back on.
 - [ ] After `slime off` only, `all on` turns the slime keys back on and leaves honey on.
 
 ## Fall damage always vanilla (run with `/stickytoggle all off`)
