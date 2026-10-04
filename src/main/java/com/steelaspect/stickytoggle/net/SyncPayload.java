@@ -23,6 +23,15 @@ public record SyncPayload(Map<Toggle, Boolean> values) implements CustomPayload 
 	}
 
 	private static SyncPayload read(PacketByteBuf buf) {
+		return new SyncPayload(readValues(buf));
+	}
+
+	private void write(PacketByteBuf buf) {
+		writeValues(buf, values);
+	}
+
+	/** Reads toggle key/value pairs, skipping keys this version doesn't know. */
+	static Map<Toggle, Boolean> readValues(PacketByteBuf buf) {
 		EnumMap<Toggle, Boolean> map = new EnumMap<>(Toggle.class);
 		int n = buf.readVarInt();
 		for (int i = 0; i < n; i++) {
@@ -30,10 +39,10 @@ public record SyncPayload(Map<Toggle, Boolean> values) implements CustomPayload 
 			boolean v = buf.readBoolean();
 			if (t != null) map.put(t, v);
 		}
-		return new SyncPayload(map);
+		return map;
 	}
 
-	private void write(PacketByteBuf buf) {
+	static void writeValues(PacketByteBuf buf, Map<Toggle, Boolean> values) {
 		buf.writeVarInt(values.size());
 		values.forEach((t, v) -> {
 			buf.writeString(t.key);

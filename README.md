@@ -50,6 +50,15 @@ Not toggleable:
 - Each word only changes its own block. `all` changes every toggle. Every command only affects the player who ran it.
 - It has to be run by a player. The server console can't use it.
 
+## Menu and hotkeys (optional, needs MaLiLib)
+With [MaLiLib](https://modrinth.com/mod/malilib) installed on your client, StickyToggle gets a menu:
+- open it from **Mod Menu** (the config button), from the mod list at the top right of any MaLiLib config screen (Litematica, Tweakeroo, MiniHUD...), or with the *Open Menu* hotkey;
+- **Blocks** tab: one row per block (plus *All Blocks*), switching every setting of that block;
+- **Settings** tab: one row per setting;
+- every row has an ON/OFF button and a hotkey. Every hotkey is unbound by default.
+
+The menu shows and changes **your settings on the server**, exactly like the command (a block row shows ON only while all of its settings are on). It only works on a server with StickyToggle 2.0+, or in singleplayer. Only the hotkeys are saved on your computer, in `config/stickytoggle-client.json`. Without MaLiLib everything still works through the command.
+
 ## Config
 `config/stickytoggle.json` is managed by the mod:
 ```json
@@ -81,7 +90,7 @@ Not toggleable:
 Prebuilt jar: [`releases/stickytoggle-2.0.0.jar`](releases/stickytoggle-2.0.0.jar)
 
 ## Install (both sides required)
-Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.3, Fabric API (0.141.6+1.21.11 tested), Java 21.
+Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.3, Fabric API (0.141.6+1.21.11 tested), Java 21. Optional on clients: MaLiLib ≥ 0.27.20 for the menu and hotkeys, Mod Menu for the config button.
 
 1. Put `stickytoggle-<version>.jar` and Fabric API in the `mods/` folder of the **server**.
 2. Put the same jars in the `mods/` folder of **every client**.
@@ -94,10 +103,11 @@ Player movement is predicted by the client. If a client joins without the mod, t
 ```
 Output: `build/libs/stickytoggle-<version>.jar`.
 
-In-game tests (opens a game window, walks a player through every block with each toggle on and off, and checks the distances, damage and server/client sync):
+In-game tests (opens a game window, walks a player through every block with each toggle on and off and checks the distances, damage and server/client sync, then drives the menu, hotkeys and Mod Menu button; screenshots land in `build/run/clientGameTest/screenshots/`):
 ```
 ./gradlew runClientGameTest
 ```
+To check the client still starts without MaLiLib: `./gradlew runClient -PwithoutMalilib`.
 
 ## Compatibility notes
 - MixinExtras is used (bundled with Fabric Loader, so it's not an extra dependency).

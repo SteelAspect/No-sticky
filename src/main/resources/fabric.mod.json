@@ -9,7 +9,8 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": ["com.steelaspect.stickytoggle.StickyToggle"],
-		"client": ["com.steelaspect.stickytoggle.client.StickyToggleClient"]
+		"client": ["com.steelaspect.stickytoggle.client.StickyToggleClient"],
+		"modmenu": ["com.steelaspect.stickytoggle.client.ModMenuIntegration"]
 	},
 	"mixins": ["stickytoggle.mixins.json"],
 	"depends": {
@@ -17,5 +18,9 @@
 		"minecraft": "~1.21.11",
 		"java": ">=21",
 		"fabric-api": "*"
+	},
+	"suggests": {
+		"malilib": ">=${malilib_version}",
+		"modmenu": "*"
 	}
 }

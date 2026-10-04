@@ -1,6 +1,8 @@
 package com.steelaspect.stickytoggle;
 
 import com.steelaspect.stickytoggle.config.StickyConfig;
+import com.steelaspect.stickytoggle.config.ToggleState;
+import com.steelaspect.stickytoggle.net.SetPayload;
 import com.steelaspect.stickytoggle.net.SyncPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -19,6 +21,16 @@ public class StickyToggle implements ModInitializer {
 	public void onInitialize() {
 		StickyConfig.load();
 		PayloadTypeRegistry.playS2C().register(SyncPayload.ID, SyncPayload.CODEC);
+		PayloadTypeRegistry.playC2S().register(SetPayload.ID, SetPayload.CODEC);
+
+		// Config menu and hotkeys: a player changing their own toggles, same as the command.
+		ServerPlayNetworking.registerGlobalReceiver(SetPayload.ID, (payload, context) -> {
+			ServerPlayerEntity player = context.player();
+			ToggleState state = StickyConfig.forPlayer(player.getUuid());
+			payload.values().forEach(state::set);
+			StickyConfig.save();
+			sync(player);
+		});
 
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> sync(handler.getPlayer()));
 		CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->

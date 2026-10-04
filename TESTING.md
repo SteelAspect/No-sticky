@@ -56,6 +56,19 @@ Lanes: a soul sand floor, an ice / packed ice / blue ice floor, a stone corridor
 - [ ] Pistons still push and pull blocks stuck to slime/honey, and slime and honey still don't stick to each other.
 - [ ] Redstone and crafting (slime ball ↔ block, honey bottle ↔ block) are unchanged.
 
+## Menu and hotkeys (client with MaLiLib; `runClientGameTest` covers most of this)
+- [ ] Mod Menu lists StickyToggle and its config button opens the menu.
+- [ ] StickyToggle is in the mod list at the top right of Litematica's / Tweakeroo's config screen, and picking it opens the menu.
+- [ ] **Blocks** tab: 10 rows (9 blocks + All Blocks) plus *Open Menu*. **Settings** tab: 13 rows. Every row has ON/OFF, a hotkey button (NONE by default) and Reset.
+- [ ] Clicking *Soul Sand* OFF makes soul sand normal speed straight away, and the *Soul Sand Slowdown* row on Settings shows OFF.
+- [ ] Clicking *Slime* OFF turns all 3 slime settings off; turning only *Slime Bounce* back on shows *Slime* as OFF.
+- [ ] `/stickytoggle ice off` while the menu is open flips the Ice rows without reopening it.
+- [ ] Bind a hotkey to a row: pressing it in game flips that setting and shows a message; it does nothing while a screen is open.
+- [ ] *Open Menu* hotkey opens the menu.
+- [ ] Hotkeys survive a game restart (`config/stickytoggle-client.json`); the server's `config/stickytoggle.json` is untouched by the client file.
+- [ ] On a server without StickyToggle (or on the title screen), clicking a row shows "StickyToggle 2.0 isn't on this server" and the row stays ON.
+- [ ] Without MaLiLib (`./gradlew runClient -PwithoutMalilib`), the game starts normally and the command still works.
+
 ## Per-player / sync
 - [ ] A non-op player can run `/stickytoggle slime off`.
 - [ ] With 2 players, A runs `/stickytoggle honey off`. A walks on honey at normal speed, B is still slowed, and neither one rubber-bands.
