@@ -42,7 +42,7 @@ public class StickyToggleClient implements ClientModInitializer {
 
 	/**
 	 * Asks the server to change some of the player's toggles. Returns false (and sends nothing) when not
-	 * connected to a server that has StickyToggle 2.0+, which is the only place the settings live.
+	 * connected to a server that has StickyToggle 2.2+, which is the only place the settings live.
 	 */
 	public static boolean request(Map<Toggle, Boolean> values) {
 		MinecraftClient client = MinecraftClient.getInstance();

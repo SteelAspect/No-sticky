@@ -57,7 +57,7 @@ With [MaLiLib](https://modrinth.com/mod/malilib) installed on your client, Stick
 - **Settings** tab: one row per setting;
 - every row has an ON/OFF button and a hotkey. Every hotkey is unbound by default.
 
-The menu shows and changes **your settings on the server**, exactly like the command (a block row shows ON only while all of its settings are on). It only works on a server with StickyToggle 2.0+, or in singleplayer. Only the hotkeys are saved on your computer, in `config/stickytoggle-client.json`. Without MaLiLib everything still works through the command.
+The menu shows and changes **your settings on the server**, exactly like the command (a block row shows ON only while all of its settings are on). It only works on a server with StickyToggle 2.2+, or in singleplayer. Only the hotkeys are saved on your computer, in `config/stickytoggle-client.json`. Without MaLiLib everything still works through the command.
 
 ## Config
 `config/stickytoggle.json` is managed by the mod:
@@ -87,7 +87,7 @@ The menu shows and changes **your settings on the server**, exactly like the com
 - `players` holds each player's own settings. To change a single effect for one player, edit their entry while the server is stopped.
 
 ## Download
-Prebuilt jar: [`releases/stickytoggle-2.0.0.jar`](releases/stickytoggle-2.0.0.jar)
+Prebuilt jar: [`releases/stickytoggle-2.2.0.jar`](releases/stickytoggle-2.2.0.jar)
 
 ## Install (both sides required)
 Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.3, Fabric API (0.141.6+1.21.11 tested), Java 21. Optional on clients: MaLiLib ≥ 0.27.20 for the menu and hotkeys, Mod Menu for the config button.

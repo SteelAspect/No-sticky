@@ -3,7 +3,7 @@
   "stickytoggle.gui.button.config_gui.blocks": "Blocks",
   "stickytoggle.gui.button.config_gui.settings": "Settings",
   "stickytoggle.hotkeys.category.generic": "Hotkeys",
-  "stickytoggle.message.not_available": "StickyToggle 2.0 isn't on this server, so there is nothing to change here. Your settings live on the server.",
+  "stickytoggle.message.not_available": "StickyToggle 2.2 isn't on this server, so there is nothing to change here. Your settings live on the server.",
   "stickytoggle.config.name.blockSlime": "Slime",
   "stickytoggle.config.prettyName.blockSlime": "Slime",
   "stickytoggle.config.comment.blockSlime": "All slime effects for you: bounce, walk slowdown and slipperiness.\nOFF = acts like a normal block, for you only. ON = vanilla.\nThe hotkey (unbound by default) flips it.",

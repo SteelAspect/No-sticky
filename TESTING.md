@@ -1,6 +1,6 @@
 # StickyToggle test checklist (Minecraft 1.21.11)
 
-Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, towers about 20 blocks tall above slime and above honey, and the 2.0 test lanes listed under *New blocks* below.
+Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, towers about 20 blocks tall above slime and above honey, and the 2.2 test lanes listed under *New blocks* below.
 
 Most of the movement checks also run automatically with `./gradlew runClientGameTest` (28 checks: every new toggle on and off, freezing and thorn damage, server/client sync, `all`). The manual list covers what that test doesn't: dedicated servers, two players, relogs, mobs and items. Run `/stickytoggle all on` before each section. To test a single toggle, stop the server, edit your entry under `players` in `config/stickytoggle.json`, then start it again.
 
@@ -22,7 +22,7 @@ Most of the movement checks also run automatically with `./gradlew runClientGame
 
 - [ ] `/stickytoggle honey off` turns off all 3 honey keys without changing the slime keys. `honey on` turns them back on.
 
-## New blocks (2.0)
+## New blocks (2.2)
 Lanes: a soul sand floor, an ice / packed ice / blue ice floor, a stone corridor filled with cobwebs, one with powder snow at feet level, one with sweet berry bushes (age 1+) on grass, a channel of flowing water, and a 10-deep soul sand bubble column plus a magma one.
 - [ ] **soulsand.slowdown=false**: walk on soul sand at stone speed. `true`: slowed. Soul Speed boots still work with `true`.
 - [ ] **ice.slipperiness=false**: sprint on each ice type and release keys, you stop as fast as on stone. `true`: you slide.
@@ -66,7 +66,7 @@ Lanes: a soul sand floor, an ice / packed ice / blue ice floor, a stone corridor
 - [ ] Bind a hotkey to a row: pressing it in game flips that setting and shows a message; it does nothing while a screen is open.
 - [ ] *Open Menu* hotkey opens the menu.
 - [ ] Hotkeys survive a game restart (`config/stickytoggle-client.json`); the server's `config/stickytoggle.json` is untouched by the client file.
-- [ ] On a server without StickyToggle (or on the title screen), clicking a row shows "StickyToggle 2.0 isn't on this server" and the row stays ON.
+- [ ] On a server without StickyToggle (or on the title screen), clicking a row shows "StickyToggle 2.2 isn't on this server" and the row stays ON.
 - [ ] Without MaLiLib (`./gradlew runClient -PwithoutMalilib`), the game starts normally and the command still works.
 
 ## Per-player / sync
