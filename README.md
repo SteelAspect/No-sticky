@@ -87,7 +87,7 @@ The menu shows and changes **your settings on the server**, exactly like the com
 - `players` holds each player's own settings. To change a single effect for one player, edit their entry while the server is stopped.
 
 ## Download
-Prebuilt jar: [`releases/stickytoggle-2.2.0.jar`](releases/stickytoggle-2.2.0.jar)
+Prebuilt jar: [`releases/stickytoggle-2.2.1.jar`](releases/stickytoggle-2.2.1.jar)
 
 ## Install (both sides required)
 Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.3, Fabric API (0.141.6+1.21.11 tested), Java 21. Optional on clients: MaLiLib ≥ 0.27.20 for the menu and hotkeys, Mod Menu for the config button.
