@@ -126,7 +126,14 @@ public final class Configs implements IConfigHandler {
 		if (Files.isRegularFile(file) && Files.isReadable(file)) {
 			JsonElement element = JsonUtils.parseJsonFile(file);
 			if (element != null && element.isJsonObject()) {
-				ConfigUtils.readHotkeys(element.getAsJsonObject(), "Hotkeys", HOTKEYS);
+				// MaLiLib loads configs on every world join and readHotkeys fires each row's change callback;
+				// without this guard every row asked the server to turn its toggles back ON.
+				refreshing = true;
+				try {
+					ConfigUtils.readHotkeys(element.getAsJsonObject(), "Hotkeys", HOTKEYS);
+				} finally {
+					refreshing = false;
+				}
 			}
 		}
 		refreshFromServer();

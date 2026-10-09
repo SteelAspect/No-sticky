@@ -9,7 +9,8 @@
   "entrypoints": {
     "fabric-client-gametest": [
       "com.steelaspect.stickytoggle.test.StickyToggleClientGameTest",
-      "com.steelaspect.stickytoggle.test.StickyToggleMenuGameTest"
+      "com.steelaspect.stickytoggle.test.StickyToggleMenuGameTest",
+      "com.steelaspect.stickytoggle.test.StickyTogglePersistGameTest"
     ]
   },
   "depends": {
