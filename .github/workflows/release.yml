@@ -44,15 +44,15 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           target_commitish: ${{ github.sha }}
-          name: StickyToggle ${{ steps.version.outputs.tag }} (Minecraft 1.21.11)
-          files: build/libs/stickytoggle-*[0-9].jar
+          name: Alloy Sticky Toggle ${{ steps.version.outputs.tag }} (Minecraft 1.21.11)
+          files: build/libs/alloy-stickytoggle-*[0-9].jar
           body: |
-            StickyToggle for **Minecraft Java 1.21.11** (Fabric).
+            Alloy Sticky Toggle for **Minecraft Java 1.21.11** (Fabric).
 
-            Each player can choose how slime and honey blocks affect their own movement:
-            - `/stickytoggle slime on|off`: bounce, walk slowdown, slipperiness
-            - `/stickytoggle honey on|off`: speed slowdown, jump reduction, wall slide
-            - `/stickytoggle all on|off`: slime and honey together
+            Each player can choose how slime, honey, soul sand, ice, cobwebs, powder snow, sweet berry bushes, water currents and bubble columns affect their own movement:
+            - `/stickytoggle <block> on|off`: one block type (`slime`, `honey`, `soulsand`, `ice`, `cobweb`, `powdersnow`, `berrybush`, `water`, `bubblecolumn`)
+            - `/stickytoggle all on|off`: everything at once
+            - Optional menu and hotkeys with MaLiLib (and a Mod Menu button)
 
             Works for every player, no op needed, and only changes the player who runs it. Fall damage, mobs, items and mechanics stay vanilla.
 

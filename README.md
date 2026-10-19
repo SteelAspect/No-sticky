@@ -1,4 +1,4 @@
-# StickyToggle
+# Alloy Sticky Toggle
 
 A Fabric mod for **Minecraft Java 1.21.11** that lets each player choose how slime, honey, soul sand, ice, cobwebs, powder snow, sweet berry bushes, water currents and bubble columns physically affect **them**.
 
@@ -51,7 +51,7 @@ Not toggleable:
 - It has to be run by a player. The server console can't use it.
 
 ## Menu and hotkeys (optional, needs MaLiLib)
-With [MaLiLib](https://modrinth.com/mod/malilib) installed on your client, StickyToggle gets a menu:
+With [MaLiLib](https://modrinth.com/mod/malilib) installed on your client, Alloy Sticky Toggle gets a menu:
 - open it from **Mod Menu** (the config button), from the mod list at the top right of any MaLiLib config screen (Litematica, Tweakeroo, MiniHUD...), or with the *Open Menu* hotkey;
 - **Blocks** tab: one row per block (plus *All Blocks*), switching every setting of that block;
 - **Settings** tab: one row per setting;
@@ -87,12 +87,12 @@ The menu shows and changes **your settings on the server**, exactly like the com
 - `players` holds each player's own settings. To change a single effect for one player, edit their entry while the server is stopped.
 
 ## Download
-Prebuilt jar: [`releases/stickytoggle-2.2.1.jar`](releases/stickytoggle-2.2.1.jar)
+Download the latest jar from the [GitHub releases](https://github.com/SteelAspect/No-sticky/releases/latest) or through Alloy Hub's Updates tab.
 
 ## Install (both sides required)
 Requirements: Minecraft 1.21.11, Fabric Loader ≥ 0.19.3, Fabric API (0.141.6+1.21.11 tested), Java 21. Optional on clients: MaLiLib ≥ 0.27.20 for the menu and hotkeys, Mod Menu for the config button.
 
-1. Put `stickytoggle-<version>.jar` and Fabric API in the `mods/` folder of the **server**.
+1. Put `alloy-stickytoggle-<version>.jar` and Fabric API in the `mods/` folder of the **server**.
 2. Put the same jars in the `mods/` folder of **every client**.
 
 Player movement is predicted by the client. If a client joins without the mod, the server logs a warning. That player can't change their settings and always gets vanilla behaviour, unless their `defaults` or `players` entry has effects turned off. In that case they will rubber-band on those blocks. Clients reset to vanilla on disconnect, so the mod is harmless on servers that don't have it.
@@ -101,7 +101,7 @@ Player movement is predicted by the client. If a client joins without the mod, t
 ```
 ./gradlew build
 ```
-Output: `build/libs/stickytoggle-<version>.jar`.
+Output: `build/libs/alloy-stickytoggle-<version>.jar`.
 
 In-game tests (opens a game window, walks a player through every block with each toggle on and off and checks the distances, damage and server/client sync, then drives the menu, hotkeys and Mod Menu button; screenshots land in `build/run/clientGameTest/screenshots/`):
 ```

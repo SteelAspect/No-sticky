@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "stickytoggle",
 	"version": "${version}",
-	"name": "StickyToggle",
+	"name": "Alloy Sticky Toggle",
 	"description": "Lets each player turn off how slime, honey, soul sand, ice, cobwebs, powder snow, berry bushes, water currents and bubble columns move them. Mobs, items and mechanics stay vanilla.",
 	"authors": ["steelaspect"],
 	"license": "MIT",

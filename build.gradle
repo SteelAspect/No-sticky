@@ -119,11 +119,11 @@ jar {
 modrinth {
     projectId = project.modrinth_project
     versionNumber = project.mod_version
-    versionName = "StickyToggle ${project.mod_version}"
+    versionName = "Alloy Sticky Toggle ${project.mod_version}"
     uploadFile = remapJar
     gameVersions = [project.minecraft_version]
     loaders = ['fabric']
-    changelog = project.findProperty('changelog') ?: "StickyToggle ${project.mod_version}"
+    changelog = project.findProperty('changelog') ?: "Alloy Sticky Toggle ${project.mod_version}"
     debugMode = project.hasProperty('modrinthDryRun')
     dependencies {
         required.project 'fabric-api'

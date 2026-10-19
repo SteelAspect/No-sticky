@@ -23,7 +23,7 @@ public final class MalilibSetup implements IKeybindProvider {
 		InitializationHandler.getInstance().registerInitializationHandler(() -> {
 			ConfigManager.getInstance().registerConfigHandler(StickyToggle.MOD_ID, Configs.INSTANCE);
 			// This is what puts StickyToggle in the mod list at the top of every MaLiLib config screen.
-			Registry.CONFIG_SCREEN.registerConfigScreenFactory(new ModInfo(StickyToggle.MOD_ID, "StickyToggle", GuiConfigs::new));
+			Registry.CONFIG_SCREEN.registerConfigScreenFactory(new ModInfo(StickyToggle.MOD_ID, "Alloy Sticky Toggle", GuiConfigs::new));
 			InputEventHandler.getKeybindManager().registerKeybindProvider(INSTANCE);
 			// On/off hotkeys keep MaLiLib's own toggle callback (it flips the option and shows a message);
 			// the option's change callback then sends the request to the server.
@@ -47,6 +47,6 @@ public final class MalilibSetup implements IKeybindProvider {
 
 	@Override
 	public void addHotkeys(IKeybindManager manager) {
-		manager.addHotkeysForCategory("StickyToggle", StickyToggle.MOD_ID + ".hotkeys.category.generic", Configs.HOTKEYS);
+		manager.addHotkeysForCategory("Alloy Sticky Toggle", StickyToggle.MOD_ID + ".hotkeys.category.generic", Configs.HOTKEYS);
 	}
 }

@@ -1,6 +1,6 @@
-# StickyToggle test checklist (Minecraft 1.21.11)
+# Alloy Sticky Toggle test checklist (Minecraft 1.21.11)
 
-Setup: dedicated server + client, both with StickyToggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, towers about 20 blocks tall above slime and above honey, and the 2.2 test lanes listed under *New blocks* below.
+Setup: dedicated server + client, both with Alloy Sticky Toggle and Fabric API. Use a normal (non-op) account. Build a test area with slime and honey floors, a 2-high honey wall, towers about 20 blocks tall above slime and above honey, and the 2.2 test lanes listed under *New blocks* below.
 
 Most of the movement checks also run automatically with `./gradlew runClientGameTest` (28 checks: every new toggle on and off, freezing and thorn damage, server/client sync, `all`). The manual list covers what that test doesn't: dedicated servers, two players, relogs, mobs and items. Run `/stickytoggle all on` before each section. To test a single toggle, stop the server, edit your entry under `players` in `config/stickytoggle.json`, then start it again.
 
@@ -57,8 +57,8 @@ Lanes: a soul sand floor, an ice / packed ice / blue ice floor, a stone corridor
 - [ ] Redstone and crafting (slime ball ↔ block, honey bottle ↔ block) are unchanged.
 
 ## Menu and hotkeys (client with MaLiLib; `runClientGameTest` covers most of this)
-- [ ] Mod Menu lists StickyToggle and its config button opens the menu.
-- [ ] StickyToggle is in the mod list at the top right of Litematica's / Tweakeroo's config screen, and picking it opens the menu.
+- [ ] Mod Menu lists Alloy Sticky Toggle and its config button opens the menu.
+- [ ] Alloy Sticky Toggle is in the mod list at the top right of Litematica's / Tweakeroo's config screen, and picking it opens the menu.
 - [ ] **Blocks** tab: 10 rows (9 blocks + All Blocks) plus *Open Menu*. **Settings** tab: 13 rows. Every row has ON/OFF, a hotkey button (NONE by default) and Reset.
 - [ ] Clicking *Soul Sand* OFF makes soul sand normal speed straight away, and the *Soul Sand Slowdown* row on Settings shows OFF.
 - [ ] Clicking *Slime* OFF turns all 3 slime settings off; turning only *Slime Bounce* back on shows *Slime* as OFF.
@@ -66,7 +66,7 @@ Lanes: a soul sand floor, an ice / packed ice / blue ice floor, a stone corridor
 - [ ] Bind a hotkey to a row: pressing it in game flips that setting and shows a message; it does nothing while a screen is open.
 - [ ] *Open Menu* hotkey opens the menu.
 - [ ] Hotkeys survive a game restart (`config/stickytoggle-client.json`); the server's `config/stickytoggle.json` is untouched by the client file.
-- [ ] On a server without StickyToggle (or on the title screen), clicking a row shows "StickyToggle 2.2 isn't on this server" and the row stays ON.
+- [ ] On a server without Alloy Sticky Toggle (or on the title screen), clicking a row shows "Alloy Sticky Toggle 2.2 isn't on this server" and the row stays ON.
 - [ ] Without MaLiLib (`./gradlew runClient -PwithoutMalilib`), the game starts normally and the command still works.
 
 ## Per-player / sync
