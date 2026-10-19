@@ -3,6 +3,7 @@
   "stickytoggle.gui.button.config_gui.blocks": "Blocks",
   "stickytoggle.gui.button.config_gui.settings": "Settings",
   "stickytoggle.hotkeys.category.generic": "Hotkeys",
+  "stickytoggle.gui.screen.hint": "Your own movement only. Install MaLiLib for per-setting rows and hotkeys.",
   "stickytoggle.message.not_available": "Alloy Sticky Toggle 2.2 isn't on this server, so there is nothing to change here. Your settings live on the server.",
   "stickytoggle.config.name.blockSlime": "Slime",
   "stickytoggle.config.prettyName.blockSlime": "Slime",

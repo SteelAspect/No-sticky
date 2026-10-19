@@ -57,7 +57,7 @@ With [MaLiLib](https://modrinth.com/mod/malilib) installed on your client, Alloy
 - **Settings** tab: one row per setting;
 - every row has an ON/OFF button and a hotkey. Every hotkey is unbound by default.
 
-The menu shows and changes **your settings on the server**, exactly like the command (a block row shows ON only while all of its settings are on). It only works on a server with StickyToggle 2.2+, or in singleplayer. Only the hotkeys are saved on your computer, in `config/stickytoggle-client.json`. Without MaLiLib everything still works through the command.
+The menu shows and changes **your settings on the server**, exactly like the command (a block row shows ON only while all of its settings are on). It only works on a server with StickyToggle 2.2+, or in singleplayer. Only the hotkeys are saved on your computer, in `config/stickytoggle-client.json`. Without MaLiLib, Mod Menu's config button opens a simple screen with one ON/OFF button per block (no per-setting rows or hotkeys), and the command works as always.
 
 ## Config
 `config/stickytoggle.json` is managed by the mod:

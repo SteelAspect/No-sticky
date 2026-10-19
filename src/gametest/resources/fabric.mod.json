@@ -10,7 +10,8 @@
     "fabric-client-gametest": [
       "com.steelaspect.stickytoggle.test.StickyToggleClientGameTest",
       "com.steelaspect.stickytoggle.test.StickyToggleMenuGameTest",
-      "com.steelaspect.stickytoggle.test.StickyTogglePersistGameTest"
+      "com.steelaspect.stickytoggle.test.StickyTogglePersistGameTest",
+      "com.steelaspect.stickytoggle.test.StickyToggleScreenGameTest"
     ]
   },
   "depends": {

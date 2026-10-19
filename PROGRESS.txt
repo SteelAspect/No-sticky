@@ -5,3 +5,5 @@
 [2026-10-17 16:27] RELEASE | 2.2.3 Alloy logo as mod icon (rename commit only changed icon + version) | finish rename | -
 [2026-10-19 12:00] AUDIT | read-only audit: dev == main == origin; gaps = rename, no Hub page/Alloy UI, Yarn, PROGRESS/LICENSE, stale README link | 2.2.4 housekeeping | -
 [2026-10-19 12:30] FEATURE | 2.2.4 on dev: display name "Alloy Sticky Toggle", jar alloy-stickytoggle-*, LICENSE (MIT), PROGRESS.txt, README download link, old jars removed from releases/, release.yml notes + jar glob | build + test, user test, then merge to main | none
+[2026-10-19 13:24] PUSH | 2.2.4 pushed to origin/dev (main untouched, no release) | user test in game, then merge to main | none
+[2026-10-19 13:39] FEATURE | 2.2.5 on dev: Mod Menu button opens a simple ON/OFF-per-block screen when MaLiLib is missing (was null); StickyToggleScreenGameTest 7/7 PASS; stale branch ccr-966e2341-je1hcm deleted; gradlew clean | user test in game, then merge to main | none
