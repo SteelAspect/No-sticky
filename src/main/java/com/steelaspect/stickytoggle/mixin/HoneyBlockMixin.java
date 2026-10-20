@@ -4,10 +4,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.steelaspect.stickytoggle.config.StickyConfig;
 import com.steelaspect.stickytoggle.config.Toggle;
-import net.minecraft.block.HoneyBlock;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.HoneyBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -20,12 +20,12 @@ public abstract class HoneyBlockMixin {
 	 * particles/sound/advancement. Fall distance is still reset while touching the wall,
 	 * so players never take more fall damage than vanilla.
 	 */
-	@WrapOperation(method = "onEntityCollision", at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/block/HoneyBlock;isSliding(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/Entity;)Z"))
+	@WrapOperation(method = "entityInside", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/world/level/block/HoneyBlock;isSlidingDown(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)Z"))
 	private boolean stickytoggle$wallSlide(HoneyBlock block, BlockPos pos, Entity entity, Operation<Boolean> original) {
-		if (entity instanceof PlayerEntity && !StickyConfig.get(entity, Toggle.HONEY_WALL_SLIDE)) {
+		if (entity instanceof Player && !StickyConfig.get(entity, Toggle.HONEY_WALL_SLIDE)) {
 			if (original.call(block, pos, entity)) {
-				entity.onLanding();
+				entity.resetFallDistance();
 			}
 			return false;
 		}

@@ -11,17 +11,20 @@
 	"entrypoints": {
 		"main": ["com.steelaspect.stickytoggle.StickyToggle"],
 		"client": ["com.steelaspect.stickytoggle.client.StickyToggleClient"],
-		"modmenu": ["com.steelaspect.stickytoggle.client.ModMenuIntegration"]
+		"modmenu": ["com.steelaspect.stickytoggle.client.ModMenuIntegration"],
+		"cytra-hub": ["com.steelaspect.stickytoggle.client.HubPlugin"]
 	},
 	"mixins": ["stickytoggle.mixins.json"],
 	"depends": {
 		"fabricloader": ">=0.19.3",
 		"minecraft": "~1.21.11",
 		"java": ">=21",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"alloy-ui": ">=1.3.0 <2.0.0"
 	},
 	"suggests": {
 		"malilib": ">=${malilib_version}",
-		"modmenu": "*"
+		"modmenu": "*",
+		"cytra-hub": "*"
 	}
 }

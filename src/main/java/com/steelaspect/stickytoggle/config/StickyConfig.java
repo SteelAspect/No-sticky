@@ -6,9 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.steelaspect.stickytoggle.StickyToggle;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -38,11 +37,11 @@ public final class StickyConfig {
 
 	/** Toggle value for this entity. Only called for players. */
 	public static boolean get(Entity entity, Toggle toggle) {
-		if (entity.getEntityWorld().isClient()) {
+		if (entity.level().isClientSide()) {
 			// The client only simulates its own player; other players are positioned by the server.
-			return !(entity instanceof PlayerEntity player && player.isMainPlayer()) || CLIENT.get(toggle);
+			return !(entity instanceof Player player && player.isLocalPlayer()) || CLIENT.get(toggle);
 		}
-		return forPlayer(entity.getUuid()).get(toggle);
+		return forPlayer(entity.getUUID()).get(toggle);
 	}
 
 	public static ToggleState forPlayer(UUID uuid) {

@@ -9,7 +9,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +25,8 @@ public class StickyToggle implements ModInitializer {
 
 		// Config menu and hotkeys: a player changing their own toggles, same as the command.
 		ServerPlayNetworking.registerGlobalReceiver(SetPayload.ID, (payload, context) -> {
-			ServerPlayerEntity player = context.player();
-			ToggleState state = StickyConfig.forPlayer(player.getUuid());
+			ServerPlayer player = context.player();
+			ToggleState state = StickyConfig.forPlayer(player.getUUID());
 			payload.values().forEach(state::set);
 			StickyConfig.save();
 			sync(player);
@@ -38,9 +38,9 @@ public class StickyToggle implements ModInitializer {
 	}
 
 	/** Sends a player their own settings, warning if their client lacks the mod. */
-	public static void sync(ServerPlayerEntity player) {
+	public static void sync(ServerPlayer player) {
 		if (ServerPlayNetworking.canSend(player, SyncPayload.ID)) {
-			ServerPlayNetworking.send(player, SyncPayload.of(StickyConfig.forPlayer(player.getUuid())));
+			ServerPlayNetworking.send(player, SyncPayload.of(StickyConfig.forPlayer(player.getUUID())));
 		} else {
 			LOGGER.warn("Player {} joined without Alloy Sticky Toggle installed; their movement prediction "
 					+ "will not match server toggles (expect rubber-banding where toggles are off).",

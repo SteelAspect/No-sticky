@@ -27,9 +27,9 @@ public class StickyTogglePersistGameTest implements FabricClientGameTest {
 		TestWorldSave save;
 		try (TestSingleplayerContext world = context.worldBuilder().create()) {
 			world.getClientWorld().waitForChunksRender();
-			context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle all on"));
+			context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle all on"));
 			context.waitTicks(5);
-			context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle slime off"));
+			context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle slime off"));
 			context.waitTicks(5);
 			check("slime off before leaving", !StickyConfig.CLIENT.get(Toggle.SLIME_BOUNCE), "client on");
 			save = world.getWorldSave();
@@ -51,7 +51,7 @@ public class StickyTogglePersistGameTest implements FabricClientGameTest {
 			context.waitTicks(20);
 			expectSlimeOff(context, "restart");
 			check("restart: server still has slime off", !server(world, Toggle.SLIME_BOUNCE), "server on");
-			context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle all on"));
+			context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle all on"));
 			context.waitTicks(5);
 		}
 
@@ -69,7 +69,7 @@ public class StickyTogglePersistGameTest implements FabricClientGameTest {
 
 	private static boolean server(TestSingleplayerContext world, Toggle toggle) {
 		return world.getServer().computeOnServer(server -> StickyConfig.forPlayer(
-				server.getPlayerManager().getPlayerList().get(0).getUuid()).get(toggle));
+				server.getPlayerList().getPlayers().get(0).getUUID()).get(toggle));
 	}
 
 	@SuppressWarnings("unchecked")

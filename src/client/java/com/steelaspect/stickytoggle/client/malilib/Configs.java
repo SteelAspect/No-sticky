@@ -17,8 +17,7 @@ import fi.dy.masa.malilib.hotkeys.IHotkey;
 import fi.dy.masa.malilib.util.InfoUtils;
 import fi.dy.masa.malilib.util.data.json.JsonUtils;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-
+import net.minecraft.client.Minecraft;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -115,7 +114,7 @@ public final class Configs implements IConfigHandler {
 		} finally {
 			refreshing = false;
 		}
-		if (MinecraftClient.getInstance().currentScreen instanceof GuiConfigs gui) {
+		if (Minecraft.getInstance().screen instanceof GuiConfigs gui) {
 			gui.refresh();
 		}
 	}

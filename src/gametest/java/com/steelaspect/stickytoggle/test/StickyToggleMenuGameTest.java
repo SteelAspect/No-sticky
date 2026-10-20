@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
 import net.fabricmc.fabric.api.client.gametest.v1.screenshot.TestScreenshotOptions;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screens.Screen;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +67,7 @@ public class StickyToggleMenuGameTest implements FabricClientGameTest {
 			check("slime block row shows OFF while one slime setting is off", !context.computeOnClient(c -> block(Toggle.Group.SLIME).getBooleanValue()), "shows on");
 
 			// The command updates the menu too.
-			context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle ice off"));
+			context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle ice off"));
 			context.waitTicks(5);
 			check("/stickytoggle ice off -> ice rows off",
 					!context.computeOnClient(c -> block(Toggle.Group.ICE).getBooleanValue() || setting(Toggle.ICE_SLIPPERINESS).getBooleanValue()), "ice row on");
@@ -102,7 +102,7 @@ public class StickyToggleMenuGameTest implements FabricClientGameTest {
 				LOG.info("Menu screenshot: {}", context.takeScreenshot(TestScreenshotOptions.of("stickytoggle-menu-" + tab.toLowerCase())));
 			}
 			// While the menu is open, a server change redraws it.
-			context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle all on"));
+			context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle all on"));
 			context.waitTicks(5);
 			check("menu open + all on -> every row ON",
 					context.computeOnClient(c -> Configs.BLOCKS.stream().allMatch(ConfigBooleanHotkeyed::getBooleanValue)
@@ -116,7 +116,7 @@ public class StickyToggleMenuGameTest implements FabricClientGameTest {
 			check("hotkeys saved to stickytoggle-client.json", json.contains("\"K\"") && json.contains("LEFT_SHIFT,B"), json);
 
 			// Leave the world off, to check the menu resets on disconnect.
-			context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle water off"));
+			context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle water off"));
 			context.waitTicks(5);
 		}
 		context.waitTicks(5);
@@ -150,7 +150,7 @@ public class StickyToggleMenuGameTest implements FabricClientGameTest {
 
 	private static boolean server(TestSingleplayerContext world, Toggle toggle) {
 		return world.getServer().computeOnServer(server -> StickyConfig.forPlayer(
-				server.getPlayerManager().getPlayerList().get(0).getUuid()).get(toggle));
+				server.getPlayerList().getPlayers().get(0).getUUID()).get(toggle));
 	}
 
 	private static String read(Path file) {

@@ -6,9 +6,8 @@ import fi.dy.masa.malilib.gui.button.ButtonBase;
 import fi.dy.masa.malilib.gui.button.ButtonGeneric;
 import fi.dy.masa.malilib.gui.button.IButtonActionListener;
 import fi.dy.masa.malilib.util.StringUtils;
-import net.minecraft.client.gui.screen.Screen;
-
 import java.util.List;
+import net.minecraft.client.gui.screens.Screen;
 
 /** Blocks tab (one row per block) and Settings tab (one row per setting), each with on/off and a hotkey. */
 public class GuiConfigs extends GuiConfigsBase {

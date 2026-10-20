@@ -8,8 +8,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-
+import net.minecraft.client.Minecraft;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,15 +44,15 @@ public class StickyToggleClient implements ClientModInitializer {
 	 * connected to a server that has StickyToggle 2.2+, which is the only place the settings live.
 	 */
 	public static boolean request(Map<Toggle, Boolean> values) {
-		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.getNetworkHandler() == null || !ClientPlayNetworking.canSend(SetPayload.ID)) {
+		Minecraft client = Minecraft.getInstance();
+		if (client.getConnection() == null || !ClientPlayNetworking.canSend(SetPayload.ID)) {
 			return false;
 		}
 		ClientPlayNetworking.send(new SetPayload(values));
 		return true;
 	}
 
-	private static void resetToVanilla(MinecraftClient client) {
+	private static void resetToVanilla(Minecraft client) {
 		StickyConfig.CLIENT.setAll(true);
 		client.execute(StickyToggleClient::stateChanged);
 	}

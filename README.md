@@ -50,6 +50,9 @@ Not toggleable:
 - Each word only changes its own block. `all` changes every toggle. Every command only affects the player who ran it.
 - It has to be run by a player. The server console can't use it.
 
+## Settings screen and Alloy Hub page
+Without MaLiLib, Mod Menu's config button opens the Alloy-styled settings screen: a switch for every block (plus *All Blocks*) and for every single setting. With [Alloy Hub](https://github.com/SteelAspect/cytra-releases) installed, the same switches are on Alloy Sticky Toggle's Hub page, with a status row saying whether the server has the mod. Both change **your settings on the server**, exactly like the command, and are greyed out on servers without the mod.
+
 ## Menu and hotkeys (optional, needs MaLiLib)
 With [MaLiLib](https://modrinth.com/mod/malilib) installed on your client, Alloy Sticky Toggle gets a menu:
 - open it from **Mod Menu** (the config button), from the mod list at the top right of any MaLiLib config screen (Litematica, Tweakeroo, MiniHUD...), or with the *Open Menu* hotkey;
@@ -57,7 +60,7 @@ With [MaLiLib](https://modrinth.com/mod/malilib) installed on your client, Alloy
 - **Settings** tab: one row per setting;
 - every row has an ON/OFF button and a hotkey. Every hotkey is unbound by default.
 
-The menu shows and changes **your settings on the server**, exactly like the command (a block row shows ON only while all of its settings are on). It only works on a server with StickyToggle 2.2+, or in singleplayer. Only the hotkeys are saved on your computer, in `config/stickytoggle-client.json`. Without MaLiLib, Mod Menu's config button opens a simple screen with one ON/OFF button per block (no per-setting rows or hotkeys), and the command works as always.
+The menu shows and changes **your settings on the server**, exactly like the command (a block row shows ON only while all of its settings are on). It only works on a server with StickyToggle 2.2+, or in singleplayer. Only the hotkeys are saved on your computer, in `config/stickytoggle-client.json`. Without MaLiLib there are no hotkeys; the settings screen above and the command still work.
 
 ## Config
 `config/stickytoggle.json` is managed by the mod:
@@ -107,7 +110,7 @@ In-game tests (opens a game window, walks a player through every block with each
 ```
 ./gradlew runClientGameTest
 ```
-To check the client still starts without MaLiLib: `./gradlew runClient -PwithoutMalilib`.
+To check the client still starts without MaLiLib: `./gradlew runClient -PwithoutMalilib`. Add `-PwithHub` to load Alloy Hub (from `libs/`) in dev runs and tests. Alloy UI comes from mavenLocal (`./gradlew publishToMavenLocal` in `../alloy-ui`). Mappings: official Mojang.
 
 ## Compatibility notes
 - MixinExtras is used (bundled with Fabric Loader, so it's not an extra dependency).

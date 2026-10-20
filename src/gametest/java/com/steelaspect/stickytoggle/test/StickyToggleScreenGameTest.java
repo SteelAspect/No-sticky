@@ -53,7 +53,7 @@ public class StickyToggleScreenGameTest implements FabricClientGameTest {
 			check("All Blocks again -> every setting off", allServer(world, false), "something still on");
 
 			// The command updates the open screen too.
-			context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle all on"));
+			context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle all on"));
 			context.waitTicks(5);
 			check("/stickytoggle all on -> screen shows all ON", context.computeOnClient(c -> StickyToggleScreen.isOn(null)), "shows off");
 			context.runOnClient(client -> client.setScreen(null));
@@ -66,7 +66,7 @@ public class StickyToggleScreenGameTest implements FabricClientGameTest {
 
 	private static boolean server(TestSingleplayerContext world, Toggle toggle) {
 		return world.getServer().computeOnServer(server -> StickyConfig.forPlayer(
-				server.getPlayerManager().getPlayerList().get(0).getUuid()).get(toggle));
+				server.getPlayerList().getPlayers().get(0).getUUID()).get(toggle));
 	}
 
 	private static boolean allServer(TestSingleplayerContext world, boolean value) {

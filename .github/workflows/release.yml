@@ -1,10 +1,9 @@
 name: Release
 
-# Publishes a release for the mod_version in gradle.properties whenever main is
-# pushed and that version has no release yet. Bump mod_version to release again.
+# Publishes a GitHub release for the mod_version in gradle.properties when run by hand (Actions tab) and that
+# version has no release yet. Manual only since 2.3.0: the build needs Alloy UI from GitHub Packages, which needs an
+# ALLOY_PACKAGES_TOKEN secret first. Normal releases go through cytra-releases (Alloy Hub).
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

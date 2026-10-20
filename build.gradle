@@ -30,11 +30,15 @@ repositories {
         filter { includeGroup 'maven.modrinth' }
     }
     maven { name = 'TerraformersMC'; url = 'https://maven.terraformersmc.com/releases' }
+    // Alloy UI (theme + widget toolkit): ./gradlew publishToMavenLocal in ../alloy-ui
+    mavenLocal {
+        content { includeModule 'dev.steelaspect', 'alloy-ui' }
+    }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     // MixinExtras is bundled with Fabric Loader, no extra dependency needed.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
@@ -49,6 +53,16 @@ dependencies {
     }
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
     modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+    // Nocturne settings screen (client code only), bundled jar-in-jar.
+    modImplementation "dev.steelaspect:alloy-ui:${project.alloyui_version}"
+    include "dev.steelaspect:alloy-ui:${project.alloyui_version}"
+
+    // Optional Alloy Hub page: compile-only, loaded only when the Hub is installed. -PwithHub adds it to dev runs/tests.
+    modCompileOnly fileTree(dir: 'libs', include: 'alloy-hub-*.jar')
+    if (project.hasProperty('withHub')) {
+        modLocalRuntime fileTree(dir: 'libs', include: 'alloy-hub-*.jar')
+    }
 }
 
 // MaLiLib ships conditional-mixin as a jar-in-jar. Loom doesn't unpack nested jars of Maven mods for
@@ -85,6 +99,16 @@ fabricApi {
         enableClientGameTests = true
         eula = true
         clearRunDirectory = true
+    }
+}
+
+// Test games start muted.
+tasks.matching { it.name == 'runClientGameTest' || it.name == 'runClient' }.configureEach {
+    doFirst {
+        def options = file(it.name == 'runClient' ? 'run/options.txt' : 'build/run/clientGameTest/options.txt')
+        options.parentFile.mkdirs()
+        def lines = options.exists() ? options.readLines().findAll { !it.startsWith('soundCategory_master:') } : []
+        options.text = (lines + 'soundCategory_master:0.0').join('\n') + '\n'
     }
 }
 

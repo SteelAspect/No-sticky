@@ -3,15 +3,15 @@ package com.steelaspect.stickytoggle.test;
 import net.fabricmc.fabric.api.client.gametest.v1.FabricClientGameTest;
 import net.fabricmc.fabric.api.client.gametest.v1.context.ClientGameTestContext;
 import net.fabricmc.fabric.api.client.gametest.v1.context.TestSingleplayerContext;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.BubbleColumnBlock;
-import net.minecraft.block.SweetBerryBushBlock;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BubbleColumnBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,13 +37,13 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	public void runTest(ClientGameTestContext context) {
 		try (TestSingleplayerContext world = context.worldBuilder().create()) {
 			world.getClientWorld().waitForChunksRender();
-			BlockPos feet = world.getServer().computeOnServer(server -> player(server).getBlockPos());
+			BlockPos feet = world.getServer().computeOnServer(server -> player(server).blockPosition());
 			origin = new BlockPos(feet.getX() - 10, Y, feet.getZ() - 10);
 			world.getServer().runCommand("gamemode survival @a");
 			// Not peaceful: peaceful regeneration would hide berry-bush thorn damage.
 			world.getServer().runCommand("difficulty easy");
 			world.getServer().runCommand("time set day");
-			context.runOnClient(client -> client.options.getAutoJump().setValue(false));
+			context.runOnClient(client -> client.options.autoJump().set(false));
 
 			testCommandTree(context);
 			BlockPos stone = lane(world, Blocks.STONE, null);
@@ -70,7 +70,7 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	// ---- tests ----
 
 	private void testCommandTree(ClientGameTestContext context) {
-		List<String> words = context.computeOnClient(client -> client.getNetworkHandler().getCommandDispatcher()
+		List<String> words = context.computeOnClient(client -> client.getConnection().getCommands()
 				.getRoot().getChild("stickytoggle").getChildren().stream().map(n -> n.getName()).sorted().toList());
 		check("command lists every group", words.equals(List.of("all", "berrybush", "bubblecolumn", "cobweb",
 				"honey", "ice", "powdersnow", "slime", "soulsand", "water")), words.toString());
@@ -98,7 +98,7 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	}
 
 	private void testIce(ClientGameTestContext context, TestSingleplayerContext world, double stoneSlide) {
-		for (BlockState ice : List.of(Blocks.ICE.getDefaultState(), Blocks.PACKED_ICE.getDefaultState(), Blocks.BLUE_ICE.getDefaultState())) {
+		for (BlockState ice : List.of(Blocks.ICE.defaultBlockState(), Blocks.PACKED_ICE.defaultBlockState(), Blocks.BLUE_ICE.defaultBlockState())) {
 			String name = ice.getBlock().getName().getString();
 			BlockPos start = lane(world, ice.getBlock(), null);
 			double on = slide(context, world, start);
@@ -113,7 +113,7 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	}
 
 	private void testCobweb(ClientGameTestContext context, TestSingleplayerContext world, double stoneWalk) {
-		BlockPos start = lane(world, Blocks.STONE, Blocks.COBWEB.getDefaultState());
+		BlockPos start = lane(world, Blocks.STONE, Blocks.COBWEB.defaultBlockState());
 		double on = walk(context, world, start, 40);
 		toggle(context, "cobweb", false);
 		double off = walk(context, world, start, 40);
@@ -124,12 +124,12 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	}
 
 	private void testPowderSnow(ClientGameTestContext context, TestSingleplayerContext world) {
-		BlockPos start = lane(world, Blocks.STONE, Blocks.POWDER_SNOW.getDefaultState());
+		BlockPos start = lane(world, Blocks.STONE, Blocks.POWDER_SNOW.defaultBlockState());
 		double on = walk(context, world, start, 40);
 		toggle(context, "powdersnow", false);
-		world.getServer().runOnServer(server -> player(server).setFrozenTicks(0));
+		world.getServer().runOnServer(server -> player(server).setTicksFrozen(0));
 		double off = walk(context, world, start, 40);
-		int frozen = world.getServer().computeOnServer(server -> player(server).getFrozenTicks());
+		int frozen = world.getServer().computeOnServer(server -> player(server).getTicksFrozen());
 		toggle(context, "powdersnow", true);
 		check("powderSnow.slowdown off: faster than on", off > on * 1.05, "on " + fmt(on) + " off " + fmt(off));
 		check("powderSnow.slowdown off: still freezes", frozen > 0, "frozen ticks " + frozen);
@@ -137,7 +137,7 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	}
 
 	private void testBerryBush(ClientGameTestContext context, TestSingleplayerContext world) {
-		BlockPos start = lane(world, Blocks.GRASS_BLOCK, Blocks.SWEET_BERRY_BUSH.getDefaultState().with(SweetBerryBushBlock.AGE, 1));
+		BlockPos start = lane(world, Blocks.GRASS_BLOCK, Blocks.SWEET_BERRY_BUSH.defaultBlockState().setValue(SweetBerryBushBlock.AGE, 1));
 		double on = walk(context, world, start, 40);
 		toggle(context, "berrybush", false);
 		world.getServer().runOnServer(server -> player(server).setHealth(20.0F));
@@ -151,7 +151,7 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 
 	private void testWaterCurrent(ClientGameTestContext context, TestSingleplayerContext world) {
 		BlockPos start = lane(world, Blocks.STONE, null);
-		world.getServer().runOnServer(server -> server.getOverworld().setBlockState(start, Blocks.WATER.getDefaultState()));
+		world.getServer().runOnServer(server -> server.overworld().setBlockAndUpdate(start, Blocks.WATER.defaultBlockState()));
 		context.waitTicks(60); // let it flow down the corridor
 		BlockPos stand = start.east(3);
 		double on = drift(context, world, stand);
@@ -163,33 +163,33 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	}
 
 	private void testBubbleColumn(ClientGameTestContext context, TestSingleplayerContext world) {
-		BlockPos bottom = origin.add(0, 0, nextLane++ * 4);
+		BlockPos bottom = origin.offset(0, 0, nextLane++ * 4);
 		world.getServer().runOnServer(server -> {
-			ServerWorld w = server.getOverworld();
+			ServerLevel w = server.overworld();
 			for (int y = -1; y <= 12; y++) {
 				for (int dx = -1; dx <= 1; dx++) {
 					for (int dz = -1; dz <= 1; dz++) {
-						w.setBlockState(bottom.add(dx, y, dz), Blocks.BARRIER.getDefaultState());
+						w.setBlockAndUpdate(bottom.offset(dx, y, dz), Blocks.BARRIER.defaultBlockState());
 					}
 				}
 			}
-			w.setBlockState(bottom, Blocks.SOUL_SAND.getDefaultState());
+			w.setBlockAndUpdate(bottom, Blocks.SOUL_SAND.defaultBlockState());
 			for (int y = 1; y <= 10; y++) {
-				w.setBlockState(bottom.up(y), Blocks.BUBBLE_COLUMN.getDefaultState().with(BubbleColumnBlock.DRAG, false));
+				w.setBlockAndUpdate(bottom.above(y), Blocks.BUBBLE_COLUMN.defaultBlockState().setValue(BubbleColumnBlock.DRAG_DOWN, false));
 			}
-			w.setBlockState(bottom.up(11), Blocks.AIR.getDefaultState());
+			w.setBlockAndUpdate(bottom.above(11), Blocks.AIR.defaultBlockState());
 		});
 		context.waitTicks(5);
-		double on = rise(context, world, bottom.up(1));
+		double on = rise(context, world, bottom.above(1));
 		toggle(context, "bubblecolumn", false);
-		double off = rise(context, world, bottom.up(1));
+		double off = rise(context, world, bottom.above(1));
 		toggle(context, "bubblecolumn", true);
 		check("bubbleColumn.push on: carried up", on > 3, "rise " + fmt(on));
 		check("bubbleColumn.push off: not carried up", off < 1, "rise " + fmt(off));
 	}
 
 	private void testAllOnOff(ClientGameTestContext context, TestSingleplayerContext world) {
-		BlockPos start = lane(world, Blocks.SOUL_SAND, Blocks.COBWEB.getDefaultState());
+		BlockPos start = lane(world, Blocks.SOUL_SAND, Blocks.COBWEB.defaultBlockState());
 		double on = walk(context, world, start, 40);
 		toggle(context, "all", false);
 		double off = walk(context, world, start, 40);
@@ -202,20 +202,20 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	// ---- helpers ----
 
 	/** Builds the next lane: floor of {@code floor}, optional {@code inLane} block at feet level. Returns the first feet position. */
-	private BlockPos lane(TestSingleplayerContext world, net.minecraft.block.Block floor, BlockState inLane) {
-		BlockPos start = origin.add(0, 0, nextLane++ * 4);
+	private BlockPos lane(TestSingleplayerContext world, net.minecraft.world.level.block.Block floor, BlockState inLane) {
+		BlockPos start = origin.offset(0, 0, nextLane++ * 4);
 		world.getServer().runOnServer(server -> {
-			ServerWorld w = server.getOverworld();
+			ServerLevel w = server.overworld();
 			for (int x = -2; x < LANE_LENGTH + 2; x++) {
 				for (int y = -1; y <= 3; y++) {
 					for (int dz = -1; dz <= 1; dz++) {
-						BlockPos p = start.add(x, y, dz);
+						BlockPos p = start.offset(x, y, dz);
 						BlockState s;
-						if (y == -1) s = (dz == 0 && x >= 0 && x < LANE_LENGTH) ? floor.getDefaultState() : Blocks.BARRIER.getDefaultState();
-						else if (dz != 0 || x < 0 || x >= LANE_LENGTH || y == 3) s = Blocks.BARRIER.getDefaultState();
+						if (y == -1) s = (dz == 0 && x >= 0 && x < LANE_LENGTH) ? floor.defaultBlockState() : Blocks.BARRIER.defaultBlockState();
+						else if (dz != 0 || x < 0 || x >= LANE_LENGTH || y == 3) s = Blocks.BARRIER.defaultBlockState();
 						else if (y == 0 && inLane != null && x >= 1) s = inLane;
-						else s = Blocks.AIR.getDefaultState();
-						w.setBlockState(p, s);
+						else s = Blocks.AIR.defaultBlockState();
+						w.setBlockAndUpdate(p, s);
 					}
 				}
 			}
@@ -228,15 +228,15 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 		context.waitTicks(15);
 	}
 
-	private static Vec3d clientPos(ClientGameTestContext context) {
-		return context.computeOnClient(client -> client.player.getEntityPos());
+	private static Vec3 clientPos(ClientGameTestContext context) {
+		return context.computeOnClient(client -> client.player.position());
 	}
 
 	/** Holds forward for {@code ticks} ticks from the lane start and returns the distance walked east. */
 	private static double walk(ClientGameTestContext context, TestSingleplayerContext world, BlockPos start, int ticks) {
 		teleport(context, world, start);
 		double x0 = clientPos(context).x;
-		context.getInput().holdKeyFor(options -> options.forwardKey, ticks);
+		context.getInput().holdKeyFor(options -> options.keyUp, ticks);
 		double d = clientPos(context).x - x0;
 		context.waitTicks(10);
 		return d;
@@ -245,7 +245,7 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 	/** Walks 20 ticks, lets go, and returns how far the player keeps going in the next 30 ticks. */
 	private static double slide(ClientGameTestContext context, TestSingleplayerContext world, BlockPos start) {
 		teleport(context, world, start);
-		context.getInput().holdKeyFor(options -> options.forwardKey, 20);
+		context.getInput().holdKeyFor(options -> options.keyUp, 20);
 		double x0 = clientPos(context).x;
 		context.waitTicks(30);
 		return clientPos(context).x - x0;
@@ -270,19 +270,19 @@ public class StickyToggleClientGameTest implements FabricClientGameTest {
 
 	/** Runs /stickytoggle as the player (like a real player would) and waits for the sync packet. */
 	private static void toggle(ClientGameTestContext context, String group, boolean on) {
-		context.runOnClient(client -> client.getNetworkHandler().sendChatCommand("stickytoggle " + group + (on ? " on" : " off")));
+		context.runOnClient(client -> client.getConnection().sendCommand("stickytoggle " + group + (on ? " on" : " off")));
 		context.waitTicks(5);
 	}
 
 	/** Server and client should agree on where the player is, or the server rubber-banded them. */
 	private void checkInSync(TestSingleplayerContext world, ClientGameTestContext context, String name) {
-		Vec3d server = world.getServer().computeOnServer(s -> player(s).getEntityPos());
-		Vec3d client = clientPos(context);
+		Vec3 server = world.getServer().computeOnServer(s -> player(s).position());
+		Vec3 client = clientPos(context);
 		check(name + ": no rubber-banding", server.distanceTo(client) < 0.1, "server " + server + " client " + client);
 	}
 
-	private static ServerPlayerEntity player(MinecraftServer server) {
-		return server.getPlayerManager().getPlayerList().get(0);
+	private static ServerPlayer player(MinecraftServer server) {
+		return server.getPlayerList().getPlayers().get(0);
 	}
 
 	private static boolean near(double value, double expected, double fraction) {
