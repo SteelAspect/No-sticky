@@ -22,7 +22,6 @@ loom {
 }
 
 repositories {
-    // MaLiLib is only published to Modrinth for 1.21.11.
     exclusiveContent {
         forRepository {
             maven { name = 'Modrinth'; url = 'https://api.modrinth.com/maven' }
@@ -51,8 +50,9 @@ dependencies {
     } else {
         modImplementation "maven.modrinth:malilib:${project.malilib_modrinth_id}"
     }
-    modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
-    modLocalRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+    // (Mod Menu 9.2.0 pulls a placeholder-api build no repo serves, hence transitive = false)
+    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") { transitive = false }
+    modLocalRuntime("com.terraformersmc:modmenu:${project.modmenu_version}") { transitive = false }
 
     // Nocturne settings screen (client code only), bundled jar-in-jar.
     modImplementation "dev.steelaspect:alloy-ui:${project.alloyui_version}"
@@ -90,25 +90,42 @@ dependencies {
     }
 }
 
-// In-game client tests (src/gametest), run with ./gradlew runClientGameTest. Not part of the mod jar.
-fabricApi {
-    configureTests {
-        createSourceSet = true
-        modId = 'stickytoggle-test'
-        enableGameTests = false
-        enableClientGameTests = true
-        eula = true
-        clearRunDirectory = true
+// Client game tests need fabric-client-gametest-api-v1 (1.21.4+): not built on 1.20.4. Instead, src/smoketest is a
+// small client mod run by ./smoketest.sh (through ./headless.sh): it joins a dedicated 1.20.4 server running the
+// built jar, walks every block with the toggles on and off, uses the screens and hotkeys, then joins a server
+// without the mod. Logs [StickySmoke] PASS/FAIL.
+sourceSets {
+    smoketest {
+        compileClasspath += main.compileClasspath + main.output + client.compileClasspath + client.output
+        runtimeClasspath += main.runtimeClasspath + main.output + client.runtimeClasspath + client.output
     }
 }
 
-// Test games start muted.
-tasks.matching { it.name == 'runClientGameTest' || it.name == 'runClient' }.configureEach {
+loom {
+    mods {
+        'stickytoggle-smoke' { sourceSet sourceSets.smoketest }
+    }
+    runs {
+        smokeTest {
+            client()
+            name 'Smoke test'
+            source sourceSets.smoketest
+            runDir 'build/run/smoke'
+            vmArg '-Dstickytoggle.smoke=true'
+            programArgs '--username', 'StickySmoke'
+            ideConfigGenerated false
+        }
+    }
+}
+
+// Test games start muted (and don't pause when the headless window has no focus).
+tasks.matching { it.name == 'runSmokeTest' || it.name == 'runClient' }.configureEach {
     doFirst {
-        def options = file(it.name == 'runClient' ? 'run/options.txt' : 'build/run/clientGameTest/options.txt')
+        def options = file(it.name == 'runClient' ? 'run/options.txt' : 'build/run/smoke/options.txt')
         options.parentFile.mkdirs()
-        def lines = options.exists() ? options.readLines().findAll { !it.startsWith('soundCategory_master:') } : []
-        options.text = (lines + 'soundCategory_master:0.0').join('\n') + '\n'
+        def keys = ['soundCategory_master:', 'pauseOnLostFocus:', 'tutorialStep:', 'autoJump:']
+        def lines = options.exists() ? options.readLines().findAll { l -> !keys.any { l.startsWith(it) } } : []
+        options.text = (lines + ['soundCategory_master:0.0', 'pauseOnLostFocus:false', 'tutorialStep:none', 'autoJump:false']).join('\n') + '\n'
     }
 }
 
@@ -121,13 +138,14 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.encoding = 'UTF-8'
+    it.options.release = 17
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {

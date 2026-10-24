@@ -15,9 +15,10 @@ import fi.dy.masa.malilib.config.options.ConfigBooleanHotkeyed;
 import fi.dy.masa.malilib.config.options.ConfigHotkey;
 import fi.dy.masa.malilib.hotkeys.IHotkey;
 import fi.dy.masa.malilib.util.InfoUtils;
-import fi.dy.masa.malilib.util.data.json.JsonUtils;
+import fi.dy.masa.malilib.util.JsonUtils;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,7 +49,7 @@ public final class Configs implements IConfigHandler {
 	/** One row per individual setting. */
 	public static final ImmutableList<ConfigBooleanHotkeyed> SETTINGS;
 	/** Unbound by default, like every hotkey of this mod. */
-	public static final ConfigHotkey OPEN_MENU = new ConfigHotkey("openConfigMenu", "").apply(PREFIX);
+	public static final ConfigHotkey OPEN_MENU = hotkey("openConfigMenu");
 
 	static {
 		ImmutableList.Builder<ConfigBooleanHotkeyed> blocks = ImmutableList.builder();
@@ -76,10 +77,23 @@ public final class Configs implements IConfigHandler {
 	}
 
 	private static ConfigBooleanHotkeyed option(String name, List<Toggle> toggles) {
-		ConfigBooleanHotkeyed option = new ConfigBooleanHotkeyed(name, true, "").apply(PREFIX);
+		ConfigBooleanHotkeyed option = new ConfigBooleanHotkeyed(name, true, "", comment(name), prettyName(name));
 		option.setValueChangeCallback(Configs::onChanged);
 		TARGETS.put(option, toggles);
 		return option;
+	}
+
+	private static ConfigHotkey hotkey(String name) {
+		return new ConfigHotkey(name, "", comment(name), prettyName(name));
+	}
+
+	// MaLiLib 0.18 (1.20.4) has no apply(prefix): the same keys are passed in directly.
+	private static String comment(String name) {
+		return PREFIX + ".comment." + name;
+	}
+
+	private static String prettyName(String name) {
+		return PREFIX + ".prettyName." + name;
 	}
 
 	/** SOUL_SAND -> SoulSand */
@@ -121,8 +135,8 @@ public final class Configs implements IConfigHandler {
 
 	@Override
 	public void load() {
-		Path file = FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME);
-		if (Files.isRegularFile(file) && Files.isReadable(file)) {
+		File file = FabricLoader.getInstance().getConfigDir().resolve(FILE_NAME).toFile();
+		if (file.isFile() && file.canRead()) {
 			JsonElement element = JsonUtils.parseJsonFile(file);
 			if (element != null && element.isJsonObject()) {
 				// MaLiLib loads configs on every world join and readHotkeys fires each row's change callback;
@@ -149,7 +163,7 @@ public final class Configs implements IConfigHandler {
 		}
 		JsonObject root = new JsonObject();
 		ConfigUtils.writeHotkeys(root, "Hotkeys", HOTKEYS);
-		JsonUtils.writeJsonToFile(root, dir.resolve(FILE_NAME));
+		JsonUtils.writeJsonToFile(root, dir.resolve(FILE_NAME).toFile());
 	}
 
 	/** Rows for one tab. */

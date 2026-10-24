@@ -19,7 +19,7 @@ public class StickyToggleClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ClientPlayNetworking.registerGlobalReceiver(SyncPayload.ID, (payload, context) -> {
+		ClientPlayNetworking.registerGlobalReceiver(SyncPayload.ID, (payload, player, responseSender) -> {
 			StickyConfig.CLIENT.setAll(true);
 			payload.values().forEach(StickyConfig.CLIENT::set);
 			stateChanged();

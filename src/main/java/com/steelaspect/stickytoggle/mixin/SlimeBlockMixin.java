@@ -19,7 +19,7 @@ public abstract class SlimeBlockMixin {
 	 * slime.bounce — vanilla bounce() flips downward Y velocity. When off, players land like
 	 * on any other block (Block.onEntityLand zeroes Y velocity).
 	 */
-	@Inject(method = "updateEntityMovementAfterFallOn", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "updateEntityAfterFallOn", at = @At("HEAD"), cancellable = true)
 	private void stickytoggle$bounce(BlockGetter world, Entity entity, CallbackInfo ci) {
 		if (entity instanceof Player && !StickyConfig.get(entity, Toggle.SLIME_BOUNCE)) {
 			entity.setDeltaMovement(entity.getDeltaMovement().multiply(1.0, 0.0, 1.0));

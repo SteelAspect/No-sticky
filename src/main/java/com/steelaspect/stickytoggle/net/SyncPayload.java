@@ -5,27 +5,22 @@ import com.steelaspect.stickytoggle.config.Toggle;
 import com.steelaspect.stickytoggle.config.ToggleState;
 import java.util.EnumMap;
 import java.util.Map;
+import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 /** S2C: full toggle state, sent as key/value pairs so unknown keys are skipped safely. */
-public record SyncPayload(Map<Toggle, Boolean> values) implements CustomPacketPayload {
-	public static final CustomPacketPayload.Type<SyncPayload> ID =
-			new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(StickyToggle.MOD_ID, "sync"));
-	public static final StreamCodec<FriendlyByteBuf, SyncPayload> CODEC =
-			CustomPacketPayload.codec(SyncPayload::write, SyncPayload::read);
+public record SyncPayload(Map<Toggle, Boolean> values) implements FabricPacket {
+	public static final PacketType<SyncPayload> ID =
+			PacketType.create(new ResourceLocation(StickyToggle.MOD_ID, "sync"), buf -> new SyncPayload(readValues(buf)));
 
 	public static SyncPayload of(ToggleState state) {
 		return new SyncPayload(state.snapshot());
 	}
 
-	private static SyncPayload read(FriendlyByteBuf buf) {
-		return new SyncPayload(readValues(buf));
-	}
-
-	private void write(FriendlyByteBuf buf) {
+	@Override
+	public void write(FriendlyByteBuf buf) {
 		writeValues(buf, values);
 	}
 
@@ -50,7 +45,7 @@ public record SyncPayload(Map<Toggle, Boolean> values) implements CustomPacketPa
 	}
 
 	@Override
-	public Type<? extends CustomPacketPayload> type() {
+	public PacketType<?> getType() {
 		return ID;
 	}
 }

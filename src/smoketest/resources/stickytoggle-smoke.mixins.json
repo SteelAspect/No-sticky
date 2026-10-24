@@ -1,0 +1,9 @@
+{
+	"required": true,
+	"package": "com.steelaspect.stickytoggle.smoke.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"client": ["ClientPacketListenerMixin"],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

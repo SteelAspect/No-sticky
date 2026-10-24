@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.steelaspect.stickytoggle.config.StickyConfig;
 import com.steelaspect.stickytoggle.config.Toggle;
-import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -111,8 +110,8 @@ public abstract class EntityMixin {
 	}
 
 	/** bubbleColumn.push — the stronger launch/pull at the top of a column, also skipped for players. */
-	@Inject(method = "onAboveBubbleColumn", at = @At("HEAD"), cancellable = true)
-	private void stickytoggle$bubbleColumnSurface(boolean drag, BlockPos pos, CallbackInfo ci) {
+	@Inject(method = "onAboveBubbleCol", at = @At("HEAD"), cancellable = true)
+	private void stickytoggle$bubbleColumnSurface(boolean drag, CallbackInfo ci) {
 		Entity self = (Entity) (Object) this;
 		if (self instanceof Player && !StickyConfig.get(self, Toggle.BUBBLE_COLUMN_PUSH)) {
 			ci.cancel();

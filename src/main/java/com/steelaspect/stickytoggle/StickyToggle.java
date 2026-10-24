@@ -6,7 +6,6 @@ import com.steelaspect.stickytoggle.net.SetPayload;
 import com.steelaspect.stickytoggle.net.SyncPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,12 +19,8 @@ public class StickyToggle implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		StickyConfig.load();
-		PayloadTypeRegistry.playS2C().register(SyncPayload.ID, SyncPayload.CODEC);
-		PayloadTypeRegistry.playC2S().register(SetPayload.ID, SetPayload.CODEC);
-
 		// Config menu and hotkeys: a player changing their own toggles, same as the command.
-		ServerPlayNetworking.registerGlobalReceiver(SetPayload.ID, (payload, context) -> {
-			ServerPlayer player = context.player();
+		ServerPlayNetworking.registerGlobalReceiver(SetPayload.ID, (payload, player, responseSender) -> {
 			ToggleState state = StickyConfig.forPlayer(player.getUUID());
 			payload.values().forEach(state::set);
 			StickyConfig.save();

@@ -19,7 +19,7 @@ public abstract class LivingEntityMixin {
 	 * (slime = 0.8, ice/packed ice/frosted ice = 0.98, blue ice = 0.989). When off, players use the
 	 * default 0.6. The block itself is not changed, so items, mobs, boats etc. still slide.
 	 */
-	@WrapOperation(method = "travelInAir", at = @At(value = "INVOKE",
+	@WrapOperation(method = "travel", at = @At(value = "INVOKE",
 			target = "Lnet/minecraft/world/level/block/Block;getFriction()F"))
 	private float stickytoggle$slipperiness(Block block, Operation<Float> original) {
 		LivingEntity self = (LivingEntity) (Object) this;
